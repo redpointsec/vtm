@@ -1,0 +1,71 @@
+{% extends 'taskManager/base.html' %}
+ {% load staticfiles %}
+ <link rel="stylesheet" href="{% static "taskManager/css/settings.css" %}"/>
+
+
+
+{% block content %}
+
+{% if not user.is_authenticated %}
+ <div class="container">
+      <div class="row">
+          <!--feature start-->
+          <div class="text-center feature-head">
+
+				<p><img src="{% static "taskManager/img/logo_lg.png" %}"/></p>
+				<h1>welcome to TaskManager</h1>
+				<p>Purposely Insecure Professional Project Management Software</p>
+          </div>
+          <div class="col-lg-4 col-sm-4">
+              <section>
+                  <div class="f-box">
+                      <i class=" fa fa-desktop"></i>
+                      <h2>Powerful Design</h2>
+                  </div>
+                  <p class="f-text">Simplicity in design but powerful project management tracking capabilities.</p>
+              </section>
+          </div>
+          <div class="col-lg-4 col-sm-4">
+              <section>
+                  <div class="f-box active">
+                      <i class=" fa fa-code"></i>
+                      <h2>API</h2>
+                  </div>
+                  <p class="f-text">Extensible interface for API driven activities, Coming soon!</p>
+              </section>
+          </div>
+          <div class="col-lg-4 col-sm-4">
+              <section>
+                  <div class="f-box">
+                      <i class="fa fa-gears"></i>
+                      <h2>fully customizable</h2>
+                  </div>
+                  <p class="f-text">Customizable project management interface that allows you to manage your projects, your way.</p>
+              </section>
+          </div>
+          <!--feature end-->
+      </div>
+      <div class="row">
+          <!--quote start-->
+          <div class="quote">
+              <div class="col-lg-3 col-sm-3 text-center pull-right">
+                  <a href="/taskManager/register" class="btn btn-danger purchase-btn">Sign-Up Now!</a>
+              </div>
+          </div>
+          <!--quote end-->
+      </div>
+  </div>
+
+  <script type="text/javascript">
+   try {
+       var hashParam = location.hash.split("#")[1];
+       var paramValue = decodeURIComponent(hashParam.split('=')[1]);
+       document.location = paramValue
+   } catch(err) {
+   }
+  </script>
+
+
+{% endif %}
+
+{% endblock %}

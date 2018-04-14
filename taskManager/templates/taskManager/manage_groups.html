@@ -1,0 +1,39 @@
+r{% extends 'taskManager/base_backend.html' %}
+{% block content %}
+<section class="wrapper">
+<div class="row">
+  <div class="col-lg-6">
+      <section class="panel">
+          <header class="panel-heading">
+              Manage User Groups
+          </header>
+          <div class="panel-body">
+              <form method="post" role="form">
+                  {% csrf_token %}
+                  <div class="form-group">
+                      <label>User</label>
+                        <select name="userid" id="userid">
+                        {% for user in users %}
+                            <option value="{{user.id}}">{{user.get_full_name}} ({{user}})</option>
+                        {% endfor %}
+                        </select>
+                  </div>
+                  <div class="form-group">
+                      <label>Access Level</label><br />
+                        <input type="radio" name="accesslevel" id="accesslevel" value="admin_g"> Admin Access<br />
+                        <input type="radio" name="accesslevel" id="accesslevel" value="project_managers"> Project Manager Access<br /> 
+                        <input type="radio" name="accesslevel" id="accesslevel" value="team_member" checked> Team Member Access<br />
+                  </div>
+                  <div class="form-group">
+                    <button type="submit" class="btn btn-info">Finish</button>
+                  </div>
+              </form>
+
+          </div>
+      </section>
+  </div>
+  
+</div>  
+</section>
+             
+{% endblock %}

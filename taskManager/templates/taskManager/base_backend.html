@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>Task Manager</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Styles
+    ================================================== -->
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{% static "taskManager/css/bootstrap.css" %}"/>
+    <link rel="stylesheet" href="{% static "taskManager/css/backend/bootstrap-reset.css" %}"/>
+    <link rel="stylesheet" href="{% static "taskManager/css/font-awesome.css" %}"/>
+    <link rel="stylesheet" href="{% static "taskManager/css/jquery.datetimepicker.css" %}"/>
+    <link rel="stylesheet" href="{% static "taskManager/css/backend/style.css" %}"/>
+    <link rel="stylesheet" href="{% static "taskManager/css/backend/style-responsive.css" %}"/>
+
+    <!-- Google Fonts
+    ================================================== -->
+
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    </head>
+<body>
+  <section id="container">
+
+<!-- Header
+================================================== -->
+ <!--header start-->
+  <header class="header white-bg">
+        <!--logo start-->
+        <a href="/taskManager/" class="logo">Task<span>Manager</span></a>
+        <!--logo end-->
+          <div class="top-nav">
+            <!--search & user info start-->
+            <ul class="nav pull-right top-menu">
+
+                <li>
+                    <form class="navbar-search" action="{% url 'taskManager:search' %}">
+                        <div class="form-group">
+                            <input type="text" name="q" class="form-control search" placeholder="Search">
+                        </div>
+                    </form>
+                </li>
+
+                <!-- user login dropdown start-->
+                <li class="dropdown">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                        <!--User Identity -->
+                        <span class="username"><i class="fa fa-user fa-fw"></i> {{ user.username|safe }}</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu extended logout">
+                        {% if user.id %}
+                          <li><a href="{% url 'taskManager:profile_by_id' user.id %}"><i class="fa fa-cog"></i>Profile</a></li>
+                        {% endif %}
+                        <li><a href="/taskManager/change_password"><i class="fa fa-lock"></i>Change PW</a></li>
+                        <li><a href="/taskManager/logout?redirect=/taskManager/"><i class="fa fa-sign-out"></i>Log Out</a></li>
+                    </ul>
+                </li>
+
+                <!-- user login dropdown end -->
+            </ul>
+            <!--search & user info end-->
+        </div>
+    </header>
+  <!--header end-->
+
+<!-- Sidebar
+================================================== -->
+<aside>
+    <div id="sidebar"  class="nav-collapse ">
+        <!-- sidebar menu start-->
+        <ul class="sidebar-menu" id="nav-accordion">
+            <li>
+                <a href="{% url 'taskManager:dashboard' %}">
+                    <i class="fa fa-dashboard"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+              {% if user.is_superuser %}
+               <a href="{% url 'taskManager:view_all_users' %}">
+                   <i class="fa fa-user"></i>
+                   <span>Users</span>
+               </a>
+               {% endif %}
+            </li>
+            <li class="sub-menu">     
+                <a href="javascript:;">
+                    <i class="fa fa-list"></i>
+                    <span>My Projects</span>
+                </a>
+                <ul class="sub">
+                    <li><a href="{% url 'taskManager:project_list' %}">Project List</a></li>
+                    {% if perms.auth.change_group %}
+                      <li><a  href="/taskManager/manage_projects">Manage Projects</a></li>
+                      <li><a  href="/taskManager/manage_groups">Manage Project Groups</a></li>
+                    {% endif %}
+                    
+                </ul>
+            </li>
+            <li>    
+                <a href="{% url 'taskManager:task_list' %}">
+                    <i class="fa fa-check-square"></i>
+                    <span>My Tasks</span>
+                </a>
+            </li>   
+            <li> 
+                <a href="{% url 'taskManager:search' %}">
+                    <i class="fa fa-search"></i>
+                    <span>Search</span>
+                </a>
+            </li>
+        </ul>
+        <!-- sidebar menu end-->
+    </div>
+</aside>
+<!--sidebar end-->
+
+<!-- Sidebar -->
+
+
+<!-- Body/content
+================================================== -->
+<section id="main-content">
+    {% block content %}
+    {% endblock %}
+</section>
+
+<!-- Body/content -->
+
+<!-- Footer
+================================================== -->
+
+<!--footer start-->
+
+<!--footer end-->
+
+<!-- End Footer -->
+
+<!-- Javascript
+================================================== -->
+<script src="{% static "taskManager/js/jquery-1.8.3.min.js" %}"></script>
+<script src="{% static "taskManager/js/bootstrap.js" %}"></script>
+<script src="{% static "taskManager/js/backend/jquery.dcjqaccordion.2.7.js" %}"></script>
+<script src="{% static "taskManager/js/backend/jquery.scrollTo.min.js" %}"></script>
+<script src="{% static "taskManager/js/backend/jquery.nicescroll.js" %}"></script>
+<script src="{% static "taskManager/js/backend/jquery.sparkline.js" %}"></script>
+<script src="{% static "taskManager/js/backend/jquery.customSelect.min.js" %}"></script>
+<script src="{% static "taskManager/js/backend/jquery.datetimepicker.js" %}"></script>
+<script src="{% static "taskManager/js/backend/respond.min.js" %}"></script>
+<script src="{% static "taskManager/js/backend/slidebars.min.js" %}"></script>
+<script src="{% static "taskManager/js/backend/common-scripts.js" %}"></script>
+
+<script>
+    // Datepicker setup
+    $(function(){
+        $('select.styled').customSelect();
+        $('#datetimepicker').datetimepicker({format:"unixtime", inline:true});
+    });
+
+</script>
+
+
+  </section>
+
+</body>
+</html>

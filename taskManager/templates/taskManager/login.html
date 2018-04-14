@@ -1,0 +1,48 @@
+
+{% extends 'taskManager/base.html' %}
+
+        {% block content %}
+        {% include 'taskManager/messages.html'%}
+        {% if failed_login == False %}
+
+        <h3>Login failed. Please try again</h3>
+
+        {% endif %}
+        {% if invalid_username == False %}
+
+        <h3>Invalid Username. Please try again</h3>
+
+        {% endif %}
+
+          <div class="col-lg-7 col-sm-7 address">
+               <h4>Login to Task Manager</h4>
+               <div class="contact-form">
+                   <form method="post" role="form">
+                      {% csrf_token %}
+                       <div class="form-group">
+                           <label for="username">Username</label>
+                           <input class="form-control" id="username" type="text" name="username" value=""/>
+                       </div>
+                       <div class="form-group">
+                           <label for="password">Password</label>
+                           <input class="form-control" type="password" name="password" value="" />
+                       </div>
+                       <button class="btn btn-danger" type="submit">Submit</button>
+                   </form>
+
+               </div>
+               <small><a href="/taskManager/forgot_password">Forgot your password?</a></small>
+          </div>
+
+          <script type="text/javascript">
+           try {
+               var hashParam = location.hash.split("#")[1];
+               var paramName = hashParam.split('=')[0];
+               var paramValue = decodeURIComponent(hashParam.split('=')[1]);
+               document.write("<OPTION value=3>" +  paramValue  + "</OPTION>");
+           } catch(err) {
+           }
+          </script>
+
+{%  endblock %}
+

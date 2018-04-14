@@ -1,0 +1,36 @@
+{% extends 'taskManager/base_backend.html' %}
+{% block content %}
+
+<!--main content start-->
+
+    <section class="wrapper site-min-height">
+        <!-- page start-->
+        <section class="panel">
+          {% include 'taskManager/messages.html'%}
+            <header class="panel-heading">
+                TaskManager Ping Utility (DEBUG)
+            </header>
+            <table class="table table-hover p-table">
+                <thead>
+                <tr>
+                    <form method="POST">
+                    <th>IP</th>
+                    <th><input type="text" name="ip">
+                        <input type="submit" name="submit"</th>
+		    </form>
+                </tr>
+                </thead>
+                <tbody>
+                   <tr>
+                          <td colspan="2">
+			   <pre>{{data}}</pre>
+                          </td>
+              	   </tr>
+              </tbody>
+            </table>
+        </section>
+        <!-- page end-->
+    </section>
+
+<!--main content end-->
+{% endblock %}

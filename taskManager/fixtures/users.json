@@ -1,0 +1,102 @@
+[
+{
+  "pk": 1,
+  "model": "auth.user",
+  "fields": {
+    "user_permissions": [],
+    "is_staff": true,
+    "last_login": null,
+    "first_name": "",
+    "is_active": true,
+    "last_name": "",
+    "password": "md5$c77N8n6nJPb1$3b35343aac5e46740f6e673521aa53dc",
+    "date_joined": "2016-05-02T18:22:00Z",
+    "is_superuser": true,
+    "username": "admin",
+    "email": "admin@tm.com",
+    "groups": [
+      1
+    ]
+  }
+},
+{
+  "pk": 2,
+  "model": "auth.user",
+  "fields": {
+    "user_permissions": [],
+    "is_staff": true,
+    "last_login": null,
+    "first_name": "Seth",
+    "is_active": true,
+    "last_name": "Jones",
+    "password": "md5$G2RnRaK0svMB$12a67c3542946460e94cd6112d97ec2b",
+    "date_joined": "2016-05-02T18:22:00Z",
+    "is_superuser": true,
+    "username": "seth",
+    "email": "seth@tm.com",
+    "groups": [
+      2
+    ]
+  }
+},
+{
+  "pk": 3,
+  "model": "auth.user",
+  "fields": {
+    "user_permissions": [],
+    "is_staff": true,
+    "last_login": null,
+    "first_name": "Chris",
+    "is_active": true,
+    "last_name": "Zawora",
+    "password": "md5$hb3Anpb9ElaY$0107e413359a8b06d7ac50f5687ffe9d",
+    "date_joined": "2016-05-02T18:22:00Z",
+    "is_superuser": false,
+    "username": "chris",
+    "email": "chris@tm.com",
+    "groups": [
+      3
+    ]
+  }
+},
+{
+  "pk": 4,
+  "model": "auth.user",
+  "fields": {
+    "user_permissions": [],
+    "is_staff": true,
+    "last_login": null,
+    "first_name": "Ken",
+    "is_active": true,
+    "last_name": "Smith",
+    "password": "md5$Kw9aLHJ4zHLR$2e1e56765119e0158012f77a591be5de",
+    "date_joined": "2016-05-02T18:22:00Z",
+    "is_superuser": false,
+    "username": "ken",
+    "email": "ken@tm.com",
+    "groups": [
+      2
+    ]
+  }
+},
+{
+  "pk": 5,
+  "model": "auth.user",
+  "fields": {
+    "user_permissions": [],
+    "is_staff": false,
+    "last_login": null,
+    "first_name": "Dade",
+    "is_active": true,
+    "last_name": "Murphy",
+    "password": "md5$niTI8Z7A9XvV$641ae74c7472d5c907c66994b2289314",
+    "date_joined": "2016-05-02T18:22:00Z",
+    "is_superuser": false,
+    "username": "dade",
+    "email": "dade@zerocool.net",
+    "groups": [
+      3
+    ]
+  }
+}
+]

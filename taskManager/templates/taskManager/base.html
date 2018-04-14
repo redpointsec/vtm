@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>Task Manager</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Styles
+    ================================================== -->  
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{% static "taskManager/css/bootstrap.css" %}"/>
+    <link rel="stylesheet" href="{% static "taskManager/css/bootstrap.min.css" %}"/>
+    <link rel="stylesheet" href="{% static "taskManager/css/font-awesome.css" %}"/>
+    <link rel="stylesheet" href="{% static "taskManager/css/style.css" %}"/>
+    
+    
+    <!-- Google Fonts
+    ================================================== -->
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:300,400,400italic,700" >
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Ubuntu:300,400,400italic,700" > 
+    
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    </head>
+<body>
+
+
+<!-- Navbar
+================================================== -->
+  <header class="header-frontend">
+      <div class="navbar navbar-default navbar-static-top">
+          <div class="container">
+              <div class="navbar-header">
+                  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                      <span class="fa fa-bars"></span>
+                  </button>
+                  <a class="navbar-brand" href="/">Task<span>Manager</span></a>
+              </div>
+              <div class="navbar-collapse collapse ">
+                  <ul class="nav navbar-nav">
+                      {% if user.is_authenticated %}
+                      <li><a href="/taskManager/logout">Logout</a></li>
+                      {% else %}
+                      <li class="active" ><a href="/taskManager/register">Sign Up</a></li>
+                      <li><a href="/taskManager/login">Login</a></li>
+                      {% endif %}
+                  </ul>
+              </div>
+          </div>
+      </div>
+  </header>
+  <!--header end-->
+
+
+<!-- Body/content
+================================================== -->
+         <!--container start-->
+          <div class="container">
+              <div class="row">
+                {% block content %}
+                {% endblock %}
+              </div>
+          </div>      
+
+<!-- Body/content -->
+
+<!-- Footer
+================================================== -->
+
+<!--footer start-->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-2 col-sm-2">
+                <h1>contact info</h1>
+                <address>
+                    <p>63877 Walnut Street
+                    Plainstown City, CA</p>
+
+                    <p>p: (320)456-7890</p>
+                    <p>f: (320)456-7891</p>
+                    <p>e: <a href="javascript:;">info@tm.com</a></p>
+                </address>
+            </div>
+            
+            <div class="col-lg-2 col-sm-2 col-lg-offset-1">
+                <h1>Our Mission</h1>
+                <p>Life elevated, task by task.</p>
+            </div>
+            
+        </div>
+    </div>
+</footer>
+<!--footer end-->
+
+<!-- End Footer -->
+
+<!-- Javascript
+================================================== -->
+    <!--<script src="{% static "taskManager/js/bootstrap.min.js" %}" ></script>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>-->
+    
+</body>     
+</html>

@@ -1,0 +1,48 @@
+[
+  {
+    "model": "taskManager.userprofile",
+    "pk": 1,
+    "fields": {
+      "image" : "/static/taskManager/img/bot.png",
+      "user" : 1,
+      "dob"  : "00/00/00"
+    }
+  },
+  {
+    "model": "taskManager.userprofile",
+    "pk": 2,
+    "fields": {
+      "image" : "/static/taskManager/img/seth.jpg",
+      "user" : 2,
+      "dob"  : "02/02/82"
+    }
+  },
+  {
+    "model": "taskManager.userprofile",
+    "pk": 3,
+    "fields": {
+      "image" : "/static/taskManager/img/team/team_img1.jpg",
+      "user" : 3,
+      "dob"  : "03/03/83"
+    }
+  },
+  {
+    "model": "taskManager.userprofile",
+    "pk": 4,
+    "fields": {
+      "image" : "/static/taskManager/img/ken.png",
+      "user" : 4,
+      "dob"  : "04/04/84"
+    }
+  },
+  {
+    "model": "taskManager.userprofile",
+    "pk": 5,
+    "fields": {
+      "image" : "/static/taskManager/img/team/team_img3.jpg",
+      "user" : 5,
+      "dob"  : "05/05/85"
+    }
+  }
+  
+]

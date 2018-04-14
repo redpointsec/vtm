@@ -1,0 +1,16 @@
+xss
+injection
+unvalidated redirects
+missing function lvl access control
+csrf
+SDE
+username_enum
+---
+
+Credential Storage Flaws
+
+Mitigate all credential storage flaws within Django.nV by implementing PBKDF2 hashes for password storage.
+
+Session Handling Flaws
+
+Implement cookie protections for Django.nV session identifiers, including HttpOnly, secure, and path restrictions.

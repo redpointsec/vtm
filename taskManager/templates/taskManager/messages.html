@@ -1,0 +1,26 @@
+{% if messages %}
+  {% for message in messages %}
+    {% if message.tags and message.tags == 'warning' %}
+      <div class="alert alert-block alert-danger fade in">
+        <button data-dismiss="alert" class="close close-sm" type="button">
+          <i class="fa fa-times"></i>
+        </button>
+        {{ message }}
+      </div>  
+    {% elif message.tags and message.tags == 'success' %}
+        <div class="alert alert-block alert-success fade in">
+          <button data-dismiss="alert" class="close close-sm" type="button">
+            <i class="fa fa-times"></i>
+          </button>
+          {{ message }}
+        </div>
+    {% elif message.tags and message.tags == 'info' %}
+        <div class="alert alert-block alert-info fade in">
+          <button data-dismiss="alert" class="close close-sm" type="button">
+            <i class="fa fa-times"></i>
+          </button>
+          {{ message }}
+        </div>      
+    {% endif %}
+  {% endfor %}
+{% endif %}

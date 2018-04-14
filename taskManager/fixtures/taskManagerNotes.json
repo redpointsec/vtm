@@ -1,0 +1,112 @@
+[
+  {
+      "fields":{
+         "task" : 1,
+         "title" : "All good",
+         "image":"2014-12-12",
+         "user":"dade",
+         "text":"ok"
+      },
+      "model":"taskManager.notes",
+      "pk":1
+   },
+   {
+      "fields":{
+         "task" : 2,
+         "title" : "Question",
+         "image":"2014-12-12",
+         "user":"dade",
+         "text":"what do you mean?"
+      },
+      "model":"taskManager.notes",
+      "pk":2
+   },
+   {
+      "fields":{
+         "task" : 3,
+         "title" : "Youth",
+         "image":"2014-12-12",
+         "user":"dade",
+         "text":"I am young and beautiful but what is Twitter?"
+      },
+      "model":"taskManager.notes",
+      "pk":3
+   },
+   {
+      "fields":{
+         "task" : 4,
+         "title" : "Tech",
+         "image":"2014-12-12",
+         "user":"admin",
+         "text":"because you don't know technology"
+      },
+      "model":"taskManager.notes",
+      "pk":4
+   },
+   {
+      "fields":{
+         "task" : 5,
+         "title" : "Education",
+         "image":"2014-12-12",
+         "user":"admin",
+         "text":"but you can leanr"
+      },
+      "model":"taskManager.notes",
+      "pk":5
+   },
+   {
+      "fields":{
+         "task" : 6,
+         "title" : "better edu",
+         "image":"2014-12-12",
+         "user":"admin",
+         "text":"I mean learn"
+      },
+      "model":"taskManager.notes",
+      "pk":6
+   },
+   {
+      "fields":{
+         "task" : 7,
+         "title" : "Planting",
+         "image":"2014-12-12",
+         "user":"seth",
+         "text":"start with some seeds"
+      },
+      "model":"taskManager.notes",
+      "pk":7
+   },
+   {
+      "fields":{
+         "task" : 8,
+         "title" : "All your base are belong to us",
+         "image":"",
+         "user":"admin",
+         "text":"<script>alert(document.cookie);</script>"
+      },
+      "model":"taskManager.notes",
+      "pk":18
+   },
+   {
+      "fields":{
+         "task" : 9,
+         "title" : "Woooops",
+         "image":"",
+         "user":"admin",
+         "text":"{% autoescape off %} <script>alert(document.cookie);</script> {% endautoescape %}"
+      },
+      "model":"taskManager.notes",
+      "pk":23
+   },
+   {
+      "fields":{
+         "task" : 10,
+         "title" : "Nothing to see here",
+         "image":"<script>alert(document.cookie);</script> {% endautoescape %}",
+         "user":"admin",
+         "text":"{% autoescape off %}"
+      },
+      "model":"taskManager.notes",
+      "pk":24
+   }
+]   

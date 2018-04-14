@@ -1,0 +1,39 @@
+{% extends 'taskManager/base_backend.html' %}
+{% block content   %}
+<section class="wrapper">
+    <!-- page start-->
+    <div class="row">
+        <div class="col-sm-6">
+            <section class="panel">
+                <header class="panel-heading">
+                    User Information
+                </header>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>ID #</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Username</th>
+                        <th>Date of Birth</th>
+                        <th>Superuser?</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for user in users %}
+                      <tr>
+                          <td>{{ user.id }}</td>
+                          <td>{{user.first_name}}</td>
+                          <td>{{user.last_name}}</td>
+                          <td>{{user.username}}</td>
+                          <td>{{user.userprofile.dob}}</td>
+                          <td>{{user.is_superuser}}</td>
+                      </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+        </div>
+</section>        
+    
+{% endblock %}

@@ -1,0 +1,93 @@
+[
+  {
+      "fields":{
+         "users_assigned":[
+            1
+         ],
+         "text":"This is the first project",
+         "title":"Default",
+         "start_date":"2014-10-10T20:56:42Z"
+      },
+      "model":"taskManager.project",
+      "pk":1
+   },
+   {
+      "fields":{
+         "users_assigned":[
+          1,
+          2
+         ],
+         "text":"number 2",
+         "title":"Default 2",
+         "start_date":"2014-10-10T21:16:26Z"
+      },
+      "model":"taskManager.project",
+      "pk":2
+   },
+   {
+      "fields":{
+         "users_assigned":[
+          1,
+          2
+         ],
+         "text":"wkjfn",
+         "title":"kwjdnf",
+         "start_date":"2014-10-24T21:08:53.942Z"
+      },
+      "model":"taskManager.project",
+      "pk":3
+   },
+   {
+      "fields":{
+         "users_assigned":[
+            1,
+            2
+         ],
+         "text":"the trunk",
+         "title":"the elephant",
+         "start_date":"2014-10-24T21:11:43.812Z"
+      },
+      "model":"taskManager.project",
+      "pk":4
+   },
+   {
+      "fields":{
+         "users_assigned":[
+            3,
+            4
+         ],
+         "text":"little dogs",
+         "title":"the punks",
+         "start_date":"2014-10-28T14:54:59.075Z"
+      },
+      "model":"taskManager.project",
+      "pk":6
+   },
+   {
+      "fields":{
+         "users_assigned":[
+            1,
+            2,
+            3,
+            4
+         ],
+         "text":"A new marketing campaign needs to be created to promote our new vacuum cleaner product. It will include television, radio, and social media as well as promotions at department stores.",
+         "title":"Marketing Campaign",
+         "start_date":"2014-11-11T18:30:45.830Z"
+      },
+      "model":"taskManager.project",
+      "pk":7
+   },
+   {
+      "fields":{
+         "users_assigned":[
+          5
+         ],
+         "text":"This is a test project",
+         "title":"test2",
+         "start_date":"2014-12-11T19:04:22.365Z"
+      },
+      "model":"taskManager.project",
+      "pk":8
+   }
+]
