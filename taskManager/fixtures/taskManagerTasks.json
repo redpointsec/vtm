@@ -229,5 +229,27 @@
     },
     "model":"taskManager.task",
     "pk":21
+ },
+ {
+    "fields":{
+       "title" : "iOS UI Design",
+       "completed":false,
+       "start_date":"2017-12-18T02:23:05.081Z",
+       "text":"Build out the wireframes for the iOS application",
+       "project":9
+    },
+    "model":"taskManager.task",
+    "pk":22
+ },
+ {
+    "fields":{
+       "title" : "Android UI Design",
+       "completed":false,
+       "start_date":"2017-12-18T02:23:05.081Z",
+       "text":"Build out the wireframes for the Android application",
+       "project":10
+    },
+    "model":"taskManager.task",
+    "pk":23
  }
 ]

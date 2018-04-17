@@ -98,5 +98,25 @@
       3
     ]
   }
+},
+{
+  "pk": 6,
+  "model": "auth.user",
+  "fields": {
+    "user_permissions": [],
+    "is_staff": true,
+    "last_login": null,
+    "first_name": "Project",
+    "is_active": true,
+    "last_name": "Manager",
+    "password": "md5$hb3Anpb9ElaY$0107e413359a8b06d7ac50f5687ffe9d",
+    "date_joined": "2016-05-02T18:22:00Z",
+    "is_superuser": false,
+    "username": "pm",
+    "email": "pm@tm.com",
+    "groups": [
+      2
+    ]
+  }
 }
 ]

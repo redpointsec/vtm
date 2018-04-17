@@ -43,6 +43,15 @@
       "user" : 5,
       "dob"  : "05/05/85"
     }
+  },
+  {
+    "model": "taskManager.userprofile",
+    "pk": 6,
+    "fields": {
+      "image" : "/static/taskManager/img/pm.png",
+      "user" : 6,
+      "dob"  : "05/20/80"
+    }
   }
   
 ]

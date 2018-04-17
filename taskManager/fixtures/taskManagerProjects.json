@@ -89,5 +89,29 @@
       },
       "model":"taskManager.project",
       "pk":8
+   },
+   {
+      "fields":{
+         "users_assigned":[
+          6
+         ],
+         "text":"iOS App Development Project",
+         "title":"ios-app-1",
+         "start_date":"2017-12-11T19:04:22.365Z"
+      },
+      "model":"taskManager.project",
+      "pk":9
+   },
+   {
+      "fields":{
+         "users_assigned":[
+          6
+         ],
+         "text":"Android App Development Project",
+         "title":"android-app-1",
+         "start_date":"2017-12-11T19:04:22.365Z"
+      },
+      "model":"taskManager.project",
+      "pk":10
    }
 ]

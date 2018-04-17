@@ -242,7 +242,7 @@ def task_create(request, project_id):
             project=proj)
 
         task.save()
-        task.users_assigned = [request.user]
+        task.users_assigned.add(request.user)
 
         return redirect('/taskManager/' + project_id +
                         '/project_details/', {'new_task_added': True})
