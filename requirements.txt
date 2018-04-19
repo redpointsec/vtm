@@ -1,1 +1,2 @@
 Django==2.0
+django-extensions==2.0.7
