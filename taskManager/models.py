@@ -50,8 +50,8 @@ class Project(models.Model):
 
 class Task(models.Model):
     project = models.ForeignKey(Project, default=1,on_delete=models.CASCADE)
-    text = models.CharField(max_length=200)
-    title = models.CharField(max_length=200, default="N/A")
+    text = models.TextField(blank=True)
+    title = models.CharField(max_length=1024, default="N/A")
     start_date = models.DateTimeField('date created')
     due_date = models.DateTimeField(
         'date due',
