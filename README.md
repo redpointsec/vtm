@@ -1,3 +1,11 @@
+```
+         __           
+___  ___/  |_  _____  
+\  \/ /\   __\/     \ 
+ \   /  |  | |  Y Y  \
+  \_/   |__| |__|_|  /
+                   \/                            
+```
 vtm - an intentionally vulnerable task manager
 ===
 
