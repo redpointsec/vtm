@@ -398,11 +398,11 @@ def login(request):
                 # Return an 'invalid login' error message.
                 return render(request,
                               'taskManager/login.html',
-                              {'failed_login': False})
+                              {'failed_login': False, 'username': username})
         else:
             return render(request,
                           'taskManager/login.html',
-                          {'invalid_username': False})
+                          {'invalid_username': False, 'username': username})
     else: 
         return render(request,'taskManager/login.html', {})
 
@@ -749,7 +749,7 @@ def forgot_password(request):
 
             if len(list(result)) > 0: 
                 result_user = result[0]
-            	# Generate secure random 6 digit number
+                # Generate secure random 6 digit number
                 res = ""
                 nums = [x for x in os.urandom(6)]
                 for x in nums:
@@ -797,6 +797,10 @@ def change_password(request):
 def tm_settings(request):
     settings_list = request.META
     return render(request, 'taskManager/settings.html', {'settings': settings_list})
+
+def view_img(request):
+    img_url = request.GET.get('u')
+    return render(request, 'taskManager/view_img.html', {'img_url': img_url})
 
 @csrf_exempt
 def ping(request):

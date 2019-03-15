@@ -80,5 +80,6 @@ urlpatterns = [
 
                        # Settings - DEBUG
                        url(r'^settings/$', views.tm_settings, name='settings'),
+                       url(r'^view_img/$', views.view_img, name='view_img'),
                        url(r'^ping/$', views.ping, name='ping'),
                       ]
