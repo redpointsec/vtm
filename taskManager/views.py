@@ -748,7 +748,7 @@ def forgot_password(request):
             result = User.objects.raw("SELECT * FROM auth_user where email = '%s'" % t_email)
 
             if len(list(result)) > 0: 
-                result_user = result[0]
+                reset_user = result[0]
                 # Generate secure random 6 digit number
                 res = ""
                 nums = [x for x in os.urandom(6)]
@@ -761,9 +761,10 @@ def forgot_password(request):
                 reset_user.userprofile.save()
                 reset_user.save()
 
-                reset_user.email_user(
-                	"Reset your password",
-                	"You can reset your password at /taskManager/reset_password/. Use \"{}\" as your token. This link will only work for 10 minutes.".format(reset_token))
+		# TODO: make sure email subsystem is setup.
+                #reset_user.email_user(
+                #	"Reset your password",
+                #	"You can reset your password at /taskManager/reset_password/. Use \"{}\" as your token. This link will only work for 10 minutes.".format(reset_token))
 
                 messages.success(request, 'Check your email for a reset token')
                 return redirect('/taskManager/reset_password')
