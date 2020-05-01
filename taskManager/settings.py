@@ -148,9 +148,9 @@ PASSWORD_HASHERS = ['django.contrib.auth.hashers.MD5PasswordHasher']
 
 SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 
-ADMINS = (
+ADMINS = [
   ('Happy Admin', 'admin@tm.com')
-)
+]
 
 EMAIL_HOST='localhost'
 EMAIL_PORT = 1025
