@@ -82,7 +82,7 @@
          "title" : "All your base are belong to us",
          "image":"",
          "user":"admin",
-         "text":"I am the eggman"
+         "text":"<script>alert(document.cookie);</script>"
       },
       "model":"taskManager.notes",
       "pk":18
@@ -93,7 +93,7 @@
          "title" : "Woooops",
          "image":"",
          "user":"admin",
-         "text":"You made a mistake here, try again"
+         "text":"{% autoescape off %} <script>alert(document.cookie);</script> {% endautoescape %}"
       },
       "model":"taskManager.notes",
       "pk":23
@@ -102,9 +102,9 @@
       "fields":{
          "task" : 10,
          "title" : "Nothing to see here",
-         "image":"",
+         "image":"<script>alert(document.cookie);</script> {% endautoescape %}",
          "user":"admin",
-         "text":"I don't see this an issue"
+         "text":"{% autoescape off %}"
       },
       "model":"taskManager.notes",
       "pk":24

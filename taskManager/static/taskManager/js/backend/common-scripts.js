@@ -1,4 +1,5 @@
 /*---LEFT BAR ACCORDION----*/
+/* This is a change */
 $(function() {
     $('#nav-accordion').dcAccordion({
         eventType: 'click',

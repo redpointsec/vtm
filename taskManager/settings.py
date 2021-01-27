@@ -16,7 +16,7 @@ SECRET_KEY = '0yxzudryd8)-%)(fz&7q-!v&cq1u6vbfoc4u7@u_&i)b@4eh^q'
 DEBUG = True
 
 #ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '34.208.145.63']
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*','vtm.rdpt.io']
 
 LOGGING = {
     'version': 1,
@@ -121,9 +121,10 @@ MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 STATIC_ROOT = '/tmp/static-tm'
 
 STATIC_URL = '/static/'
+ADMIN_MEDIA_PREFIX = STATIC_URL + "admin/"
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "static"),
+    os.path.join(BASE_DIR, "taskManager/static"),
 )
 
 TEMPLATES = [

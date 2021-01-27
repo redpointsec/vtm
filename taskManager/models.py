@@ -59,7 +59,7 @@ class Task(models.Model):
             timezone.now() +
             datetime.timedelta(
                 weeks=1)))
-    completed = models.NullBooleanField(default=False)
+    completed = models.BooleanField(default=False,null=True)
     users_assigned = models.ManyToManyField(User)
 
     def __str__(self):

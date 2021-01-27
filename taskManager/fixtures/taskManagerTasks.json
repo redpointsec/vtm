@@ -210,10 +210,10 @@
  },
  {
     "fields":{
-       "title" : "Stuff",
+       "title" : "XSS n Stuff",
        "completed":false,
        "start_date":"2014-12-12T19:46:37.723Z",
-       "text":"Do some stuff here",
+       "text":"<img alt=<script>alert(document.cookie);</script>>",
        "project":4
     },
     "model":"taskManager.task",

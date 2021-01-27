@@ -761,10 +761,9 @@ def forgot_password(request):
                 reset_user.userprofile.save()
                 reset_user.save()
 
-		# TODO: make sure email subsystem is setup.
                 #reset_user.email_user(
-                #	"Reset your password",
-                #	"You can reset your password at /taskManager/reset_password/. Use \"{}\" as your token. This link will only work for 10 minutes.".format(reset_token))
+                	#"Reset your password",
+                	#"You can reset your password at /taskManager/reset_password/. Use \"{}\" as your token. This link will only work for 10 minutes.".format(reset_token))
 
                 messages.success(request, 'Check your email for a reset token')
                 return redirect('/taskManager/reset_password')
