@@ -205,7 +205,7 @@ def download(request, file_id):
         response['Content-Disposition'] = 'attachment; filename=%s' % file.name
     else:
         response = HttpResponse('Unauthorized', status=401)
-        
+
     return response
 
 @login_required
@@ -403,7 +403,7 @@ def login(request):
             return render(request,
                           'taskManager/login.html',
                           {'invalid_username': False, 'username': username})
-    else: 
+    else:
         return render(request,'taskManager/login.html', {})
 
 
@@ -539,7 +539,7 @@ def note_edit(request, project_id, task_id, note_id):
     proj = Project.objects.get(pk=project_id)
     task = Task.objects.get(pk=task_id)
     note = Notes.objects.get(pk=note_id)
-    
+
     if not belongs_to_project(request.user, task.project.id):
         return HttpResponse('Unauthorized', status=401)
 
@@ -567,7 +567,7 @@ def note_delete(request, project_id, task_id, note_id):
     proj = Project.objects.get(pk=project_id)
     task = Task.objects.get(pk=task_id)
     note = Notes.objects.get(pk=note_id)
-     
+
     if proj is not None:
         if task is not None and task.project == proj and belongs_to_project(request.user, task.project.id):
             if note is not None and note.task == task:
@@ -577,7 +577,7 @@ def note_delete(request, project_id, task_id, note_id):
 
 @login_required
 def task_details(request, project_id, task_id):
-    
+
     task = Task.objects.get(pk=task_id)
     if not belongs_to_project(request.user, task.project.id):
         return HttpResponse('Unauthorized', status=401)
@@ -651,9 +651,15 @@ def search(request):
     my_project_list = Project.objects.filter(
         users_assigned=request.user.id).filter(
             title__icontains=query).order_by('title')
-    my_task_list = Task.objects.filter(
-        users_assigned=request.user.id).filter(
-            title__icontains=query).order_by('title')
+
+    # TODO Task list query is complicated, switch to using ORM sometime soon.
+    task_query = "%%" + query + "%%"
+    sql = "select * from taskManager_task as t INNER JOIN taskManager_task_users_assigned as a ON t.id = a.task_id WHERE t.text LIKE '%s' OR t.title LIKE '%s' AND a.user_id = %d" % (task_query,task_query,request.user.id)
+    my_task_list = Task.objects.raw(sql)
+
+    #my_task_list = Task.objects.filter(
+    #    users_assigned=request.user.id).filter(
+    #        title__icontains=query).order_by('title')
     return render(request,
                   'taskManager/search.html',
                   {'q': query,
@@ -747,7 +753,7 @@ def forgot_password(request):
         try:
             result = User.objects.raw("SELECT * FROM auth_user where email = '%s'" % t_email)
 
-            if len(list(result)) > 0: 
+            if len(list(result)) > 0:
                 reset_user = result[0]
                 # Generate secure random 6 digit number
                 res = ""
@@ -804,11 +810,11 @@ def view_img(request):
 
 @csrf_exempt
 def ping(request):
-    
+
     data = ""
     if request.method == 'POST':
         ip = request.POST.get('ip')
         cmd = "ping -c 5 %s" % ip
         data = subprocess.getoutput(cmd)
-        
+
     return render(request, 'taskManager/ping.html', {'data': data})
