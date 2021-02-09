@@ -92,7 +92,7 @@
                </a>
                {% endif %}
             </li>
-            <li class="sub-menu">     
+            <li class="sub-menu">
                 <a href="javascript:;">
                     <i class="fa fa-list"></i>
                     <span>My Projects</span>
@@ -103,16 +103,16 @@
                       <li><a  href="/taskManager/manage_projects">Manage Projects</a></li>
                       <li><a  href="/taskManager/manage_groups">Manage Project Groups</a></li>
                     {% endif %}
-                    
+
                 </ul>
             </li>
-            <li>    
+            <li>
                 <a href="{% url 'taskManager:task_list' %}">
                     <i class="fa fa-check-square"></i>
                     <span>My Tasks</span>
                 </a>
-            </li>   
-            <li> 
+            </li>
+            <li>
                 <a href="{% url 'taskManager:search' %}">
                     <i class="fa fa-search"></i>
                     <span>Search</span>
@@ -158,6 +158,11 @@
 <script src="{% static "taskManager/js/backend/respond.min.js" %}"></script>
 <script src="{% static "taskManager/js/backend/slidebars.min.js" %}"></script>
 <script src="{% static "taskManager/js/backend/common-scripts.js" %}"></script>
+<script>
+jQuery('#datetimepicker').datetimepicker({
+  format:'unixtime'
+});
+</script>
 
 <script>var srvyr_client_id = "925d8f9f-db20-11ea-8165-0279d7948544";</script>
 <script type="text/javascript" src="https://rdpt.dev/js/srvyr.js"></script>
