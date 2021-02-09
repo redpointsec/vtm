@@ -18,10 +18,13 @@
               <form method="post" role="form">
                   {% csrf_token %}
                   <div class="form-group">
-                      <label>Enter Task Title</label>
-                      <input name="task_title" class="form-control" value ="{{task.title}}">
-                      <label>Enter Task Information</label>
-                      <textarea name="text" class="form-control">{{task.text}}</textarea>
+                      <label>Task Title</label>
+                      <input name="task_title" class="form-control" value ="{{task.title}}"><br />
+                      <label>Task Details</label>
+                      <textarea name="text" class="form-control">{{task.text}}</textarea><br />
+                      <label>Task Due Date</label><br />
+                      {{task.due_date}}<br />
+                      <input name="task_duedate" class="form-control" id="datetimepicker" type="text" value="{{due_date}}"><br />
                       <label>Task Completion</label>
                       <input type="radio" name="task_completed" value="1" {% if task.completed %}checked{% endif %}> Yes&nbsp;
                       <input type="radio" name="task_completed" value="0" {% if not task.completed %}checked{% endif %}> No
@@ -32,8 +35,8 @@
           </div>
       </section>
   </div>
-  
-</div>  
+
+</div>
 </section>
 
 {% endblock %}

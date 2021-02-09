@@ -169,7 +169,7 @@ def upload(request, project_id):
         if (form.is_valid()) and (proj.users_assigned.filter(id=request.user.id).exists()):
             if request.POST.get('url_file', False) != None:
                 name = str(uuid.uuid4())[0:7] # just making up a fake name
-                response = requests.get(request.POST.get('url_file', False)) #making request for image 
+                response = requests.get(request.POST.get('url_file', False)) #making request for image
                 _file = response.content # taking response content and storing it in _file var
                 content_type = response.headers["Content-Type"]
                 if "image" in content_type:
@@ -177,7 +177,7 @@ def upload(request, project_id):
                 else:
                     # I don't know how to return the data _file.decode("utf-8")
                     return render(request, 'taskManager/upload.html', {'form': _file.decode("utf-8")})
-         
+
             else:
                 name = request.POST.get('name', False)
                 upload_path = store_uploaded_file(name, request.FILES['file'])
@@ -280,16 +280,21 @@ def task_edit(request, project_id, task_id):
             text = request.POST.get('text', False)
             task_title = request.POST.get('task_title', False)
             task_completed = request.POST.get('task_completed', False)
+            if request.POST.get('task_duedate') != '':
+                task_duedate = datetime.datetime.fromtimestamp(
+                    int(request.POST.get('task_duedate', False)))
 
             task.title = task_title
             task.text = text
             task.completed = True if task_completed == "1" else False
+            task.due_date = task_duedate
             task.save()
 
         return redirect('/taskManager/' + project_id + '/' + task_id)
     else:
+        due_date = task.due_date.timestamp()
         return render(
-            request, 'taskManager/task_edit.html', {'task': task})
+            request, 'taskManager/task_edit.html', {'task': task, 'due_date': due_date})
 
 # TODO: Check authorization
 @login_required
@@ -376,8 +381,9 @@ def project_edit(request, project_id):
 
         return redirect('/taskManager/' + project_id + '/project_details/')
     else:
+        due_date = proj.due_date.timestamp()
         return render(
-            request, 'taskManager/project_edit.html', {'proj': proj})
+            request, 'taskManager/project_edit.html', {'proj': proj, 'due_date': due_date})
 
 # Project deletion
 @login_required
