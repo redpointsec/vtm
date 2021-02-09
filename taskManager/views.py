@@ -5,6 +5,10 @@ import mimetypes
 import os
 import codecs
 import subprocess
+import requests
+import io
+import uuid
+
 
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
@@ -161,10 +165,22 @@ def upload(request, project_id):
 
         proj = Project.objects.get(pk=project_id)
         form = ProjectFileForm(request.POST, request.FILES)
-
+        ## kind of janky, you have to subimt a file and file by url, I wasn't sure how to get the form to validate
         if (form.is_valid()) and (proj.users_assigned.filter(id=request.user.id).exists()):
-            name = request.POST.get('name', False)
-            upload_path = store_uploaded_file(name, request.FILES['file'])
+            if request.POST.get('url_file', False) != None:
+                name = str(uuid.uuid4())[0:7] # just making up a fake name
+                response = requests.get(request.POST.get('url_file', False)) #making request for image 
+                _file = response.content # taking response content and storing it in _file var
+                content_type = response.headers["Content-Type"]
+                if "image" in content_type:
+                    upload_path = store_uploaded_file(name, _file)
+                else:
+                    # I don't know how to return the data _file.decode("utf-8")
+                    return render(request, 'taskManager/upload.html', {'form': _file.decode("utf-8")})
+         
+            else:
+                name = request.POST.get('name', False)
+                upload_path = store_uploaded_file(name, request.FILES['file'])
 
             #Insert file details into the database
             curs = connection.cursor()
