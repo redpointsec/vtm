@@ -3,6 +3,7 @@
 import datetime
 import mimetypes
 import os
+import re
 import codecs
 import subprocess
 import requests
@@ -838,7 +839,10 @@ def ping(request):
     data = ""
     if request.method == 'POST':
         ip = request.POST.get('ip')
-        cmd = "ping -c 5 %s" % ip
-        data = subprocess.getoutput(cmd)
+        if re.match('.*rm .*',ip,re.I):
+            data = "Nice try on the rm, but no"
+        else:
+            cmd = "ping -c 5 %s" % ip
+            data = subprocess.getoutput(cmd)
 
     return render(request, 'taskManager/ping.html', {'data': data})
