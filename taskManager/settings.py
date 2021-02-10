@@ -53,10 +53,6 @@ LOGGING = {
             'propagate': True,
             'level':'DEBUG',
         },
-        'Django.NV': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-        },
     }
 }
 
