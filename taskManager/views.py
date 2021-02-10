@@ -26,7 +26,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import user_passes_test, login_required
 
 from taskManager.models import Task, Project, Notes, File, UserProfile
-from taskManager.misc import store_uploaded_file
+from taskManager.misc import store_uploaded_file, store_url_data
 from taskManager.forms import UserForm, ProjectFileForm, ProfileForm
 
 @login_required
@@ -167,16 +167,18 @@ def upload(request, project_id):
         form = ProjectFileForm(request.POST, request.FILES)
         ## kind of janky, you have to subimt a file and file by url, I wasn't sure how to get the form to validate
         if (form.is_valid()) and (proj.users_assigned.filter(id=request.user.id).exists()):
-            if request.POST.get('url_file', False) != None:
-                name = str(uuid.uuid4())[0:7] # just making up a fake name
-                response = requests.get(request.POST.get('url_file', False)) #making request for image
+            if request.POST.get('url', False) != None:
+                name = request.POST.get('name', False)
+                url = request.POST.get('url', False)
+                response = requests.get(url) #making request for image
                 _file = response.content # taking response content and storing it in _file var
                 content_type = response.headers["Content-Type"]
                 if "image" in content_type:
-                    upload_path = store_uploaded_file(name, _file)
+                    upload_path = store_url_data(url, _file)
                 else:
+                    messages.warning(request, "Error in URL Upload")
                     # I don't know how to return the data _file.decode("utf-8")
-                    return render(request, 'taskManager/upload.html', {'form': _file.decode("utf-8")})
+                    return render(request, 'taskManager/upload.html', {'data': _file.decode("utf-8"), 'name': name, 'url': url })
 
             else:
                 name = request.POST.get('name', False)
@@ -185,7 +187,7 @@ def upload(request, project_id):
             #Insert file details into the database
             curs = connection.cursor()
             curs.execute(
-                "insert into taskManager_file ('name','path','project_id') values ( %s, %s, %s)",
+                "insert into taskManager_file (name,path,project_id) values (%s, %s, %s)",
                 (name, upload_path, project_id))
 
             # file = File(
@@ -247,8 +249,8 @@ def task_create(request, project_id):
         now = timezone.now()
         task_duedate = timezone.now() + datetime.timedelta(weeks=1)
         if request.POST.get('task_duedate') != '':
-            task_duedate = datetime.datetime.fromtimestamp(
-                int(request.POST.get('task_duedate', False)))
+            task_duedate = datetime.datetime.strptime(
+                request.POST.get('task_duedate', False),'%Y-%m-%d')
 
         task = Task(
             text=text,
@@ -281,8 +283,8 @@ def task_edit(request, project_id, task_id):
             task_title = request.POST.get('task_title', False)
             task_completed = request.POST.get('task_completed', False)
             if request.POST.get('task_duedate') != '':
-                task_duedate = datetime.datetime.fromtimestamp(
-                    int(request.POST.get('task_duedate', False)))
+                task_duedate = datetime.datetime.strptime(
+                    request.POST.get('task_duedate', False),'%Y-%m-%d')
 
             task.title = task_title
             task.text = text
@@ -292,7 +294,7 @@ def task_edit(request, project_id, task_id):
 
         return redirect('/taskManager/' + project_id + '/' + task_id)
     else:
-        due_date = task.due_date.timestamp()
+        due_date = task.due_date.strftime('%Y-%m-%d')
         return render(
             request, 'taskManager/task_edit.html', {'task': task, 'due_date': due_date})
 
@@ -339,8 +341,8 @@ def project_create(request):
         text = request.POST.get('text', False)
         project_priority = int(request.POST.get('project_priority', False))
         now = timezone.now()
-        project_duedate = timezone.make_aware(datetime.datetime.fromtimestamp(
-            int(request.POST.get('project_duedate', False))))
+        project_duedate = timezone.make_aware(datetime.datetime.strptime(
+            request.POST.get('project_duedate', False),'%Y-%m-%d'))
 
         project = Project(title=title,
                           text=text,
@@ -370,8 +372,8 @@ def project_edit(request, project_id):
         title = request.POST.get('title', False)
         text = request.POST.get('text', False)
         project_priority = int(request.POST.get('project_priority', False))
-        project_duedate = datetime.datetime.fromtimestamp(
-            int(request.POST.get('project_duedate', False)))
+        project_duedate = timezone.make_aware(datetime.datetime.strptime(
+            request.POST.get('project_duedate', False),'%Y-%m-%d'))
 
         proj.title = title
         proj.text = text
@@ -381,7 +383,7 @@ def project_edit(request, project_id):
 
         return redirect('/taskManager/' + project_id + '/project_details/')
     else:
-        due_date = proj.due_date.timestamp()
+        due_date = proj.due_date.strftime('%Y-%m-%d')
         return render(
             request, 'taskManager/project_edit.html', {'proj': proj, 'due_date': due_date})
 

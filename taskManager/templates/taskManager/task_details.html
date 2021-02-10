@@ -28,10 +28,10 @@
                     <div class="panel-body">
                         <div class="row p-details">
                             <div class="col-md-5">
-                                <p><span class="bold">Created:</span> {{task.start_date}} </p>
+                                <p><span class="bold">Created:</span> {{task.start_date | date:'Y-m-d' }} </p>
                             </div>
                             <div class="col-md-5">
-                                <p><span class="bold">Due:</span> {{task.due_date}} </p>
+                                <p><span class="bold">Due:</span> {{task.due_date | date:'Y-m-d' }} </p>
                             </div>
                             <div class="col-md-5">
                                 <p><span class="bold">Participants:</span>
@@ -87,7 +87,7 @@
                                           <td><a href="{% url 'taskManager:note_edit' project_id=task.project.id task_id=task.id note_id=note.id %}">Edit</a></td>
                                           <td><a href="{% url 'taskManager:note_delete' project_id=task.project.id task_id=task.id note_id=note.id %}">Delete</a></td>
                                         </tr>
-                                        {% endfor %}  
+                                        {% endfor %}
                                       </tbody>
                                     </table>
                                 </span>

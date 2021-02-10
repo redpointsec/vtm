@@ -46,9 +46,9 @@
                               <a href="{% url 'taskManager:project_details' proj.id %}">{{proj.title}}</a>
                               <br>
                               <small>Due {% if proj.is_overdue %}
-                            <b style="color:red">{{proj.due_date}}</b>
+                            <b style="color:red">{{proj.due_date | date:'Y-m-d'}}</b>
                           {% else %}
-                            {{proj.due_date}}
+                            {{proj.due_date | date:'Y-m-d'}}
                           {% endif %}</small>
                           </td>
                           <td class="p-team">

@@ -3,4 +3,5 @@ mysite.log
 *.pyc
 .DS_Store
 vtm_venv/
+taskManager/static/taskManager/uploads/
 *.log

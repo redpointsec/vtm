@@ -66,7 +66,14 @@ class UserForm(forms.ModelForm):
 class ProjectFileForm(forms.Form):
     """ Used for uploading files attached to projects """
     name = forms.CharField(max_length=300)
-    file = forms.FileField()
+    file = forms.FileField(required=False)
+    url = forms.CharField(max_length=2048, required=False)
+
+    def clean(self):
+        check = [self.cleaned_data['file'], self.cleaned_data['url']]
+        if any(check) and not all(check):
+            return self.cleaned_data
+        raise forms.ValidationError("Select either File or URL")
 
 
 class ProfileForm(forms.Form):

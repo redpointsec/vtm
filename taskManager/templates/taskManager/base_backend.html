@@ -159,9 +159,7 @@
 <script src="{% static "taskManager/js/backend/slidebars.min.js" %}"></script>
 <script src="{% static "taskManager/js/backend/common-scripts.js" %}"></script>
 <script>
-jQuery('#datetimepicker').datetimepicker({
-  format:'unixtime'
-});
+jQuery('#datetimepicker').datetimepicker({timepicker:false, format: 'Y-m-d'});
 </script>
 
 <script>var srvyr_client_id = "925d8f9f-db20-11ea-8165-0279d7948544";</script>

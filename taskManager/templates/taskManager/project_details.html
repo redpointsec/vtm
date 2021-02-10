@@ -28,10 +28,10 @@
                                 <p><span class="bold">Status:</span> <span class="label label-primary">Active</span></p>
                             </div>
                             <div class="bio-row">
-                                <p><span class="bold">Created:</span>{{proj.start_date}} </p>
+                                <p><span class="bold">Created:</span>{{proj.start_date | date:'Y-m-d'}} </p>
                             </div>
                             <div class="bio-row">
-                                <p><span class="bold">Due:</span>{% if proj.is_overdue %}<b style="color:red">{{proj.due_date}}</b>{% else %}{{proj.due_date}}{% endif %} </p>
+                                <p><span class="bold">Due:</span>{% if proj.is_overdue %}<b style="color:red">{{proj.due_date | date:'Y-m-d'}}</b>{% else %}{{proj.due_date | date:'Y-m-d'}}{% endif %} </p>
                             </div>
                             <div class="bio-row">
                                 <p><span class="bold">Participants:</span>
@@ -75,9 +75,9 @@
                           </td>
                           <td>
                           {% if task.is_overdue %}
-                            <b style="color:red">{{task.due_date}}</b>
+                            <b style="color:red">{{task.due_date | date:'Y-m-d'}}</b>
                           {% else %}
-                            {{task.due_date}}
+                            {{task.due_date | date:'Y-m-d'}}
                           {% endif %}
                           </td>
                           <td>

@@ -23,7 +23,6 @@
                       <label>Task Details</label>
                       <textarea name="text" class="form-control">{{task.text}}</textarea><br />
                       <label>Task Due Date</label><br />
-                      {{task.due_date}}<br />
                       <input name="task_duedate" class="form-control" id="datetimepicker" type="text" value="{{due_date}}"><br />
                       <label>Task Completion</label>
                       <input type="radio" name="task_completed" value="1" {% if task.completed %}checked{% endif %}> Yes&nbsp;
