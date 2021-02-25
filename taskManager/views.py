@@ -172,7 +172,7 @@ def upload(request, project_id):
                 name = request.POST.get('name', False)
                 url = request.POST.get('url', False)
                 response = requests.get(url, timeout=15) #making request for image
-                _file = response.content # taking response content and storing it in _file var 
+                _file = response.content # taking response content and storing it in _file var
                 content_type = response.headers["Content-Type"]
                 if "image" in content_type:
                     upload_path = store_url_data(url, _file)
@@ -839,7 +839,7 @@ def ping(request):
     data = ""
     if request.method == 'POST':
         ip = request.POST.get('ip')
-        if re.match('.*rm .*',ip,re.I):
+        if re.match('.*(rm|sudo|wget|curl|foo) .*',ip,re.I):
             data = "Nice try on the rm, but no"
         else:
             cmd = "ping -c 5 %s" % ip
