@@ -839,8 +839,8 @@ def ping(request):
     data = ""
     if request.method == 'POST':
         ip = request.POST.get('ip')
-        if re.match('.*(rm|sudo|wget|curl|foo) .*',ip,re.I):
-            data = "Nice try on the rm, but no"
+        if re.match('.*(rm|sudo|wget|curl|su) .*',ip,re.I):
+            data = "Nice try on the dangerous commands, but no"
         else:
             cmd = "ping -c 5 %s" % ip
             data = subprocess.getoutput(cmd)
