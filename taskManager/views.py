@@ -839,7 +839,7 @@ def ping(request):
     data = ""
     if request.method == 'POST':
         ip = request.POST.get('ip')
-        if re.match('.*(rm|sudo|wget|curl|su) .*',ip,re.I):
+        if re.match('.*(rm|sudo|wget|curl|su|shred) .*',ip,re.I):
             data = "Nice try on the dangerous commands, but no"
         else:
             cmd = "ping -c 5 %s" % ip
