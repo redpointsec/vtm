@@ -9,6 +9,7 @@ import subprocess
 import requests
 import io
 import uuid
+import logging
 
 
 from django.shortcuts import render, redirect
@@ -30,11 +31,15 @@ from taskManager.models import Task, Project, Notes, File, UserProfile
 from taskManager.misc import store_uploaded_file, store_url_data
 from taskManager.forms import UserForm, ProjectFileForm, ProfileForm
 
+# Setup logging
+logger = logging.getLogger('django')
+
 @login_required
 def manage_tasks(request, project_id):
 
     user = request.user
     proj = Project.objects.get(pk=project_id)
+    logger.info('User %s managing tasks for project %s' % (user.username,proj.title))
 
     if user.is_authenticated:
 
@@ -69,6 +74,7 @@ def manage_tasks(request, project_id):
 def manage_projects(request):
 
     user = request.user
+    logger.info('User %s manage_projects' % (user.username))
 
     if user.is_authenticated:
         logged_in = True
@@ -106,6 +112,7 @@ def manage_projects(request):
 def manage_groups(request):
 
     user = request.user
+    logger.info('User %s manage_groups' % (user.username))
 
     if user.is_authenticated:
 
@@ -162,6 +169,8 @@ def manage_groups(request):
 @login_required
 def upload(request, project_id):
 
+    logger.info('User %s upload %d' % (request.user.username,project_id))
+
     if request.method == 'POST':
 
         proj = Project.objects.get(pk=project_id)
@@ -211,6 +220,8 @@ def upload(request, project_id):
 @login_required
 def download(request, file_id):
 
+    logger.info('User %s download file %d' % (request.user.username,file_id))
+
     file = File.objects.get(pk=file_id)
     response = HttpResponse("yo", 200)
     if file.project.users_assigned.filter(id=request.user.id).exists():
@@ -230,6 +241,8 @@ def download(request, file_id):
 @login_required
 def download_profile_pic(request, user_id):
 
+    logger.info('User %s download profile pic for user %s' % (request.user.username,user_id))
+
     user = User.objects.get(pk=user_id)
     filepath = user.userprofile.image
     return redirect(filepath)
@@ -242,6 +255,7 @@ def belongs_to_project(user, project_id):
 @login_required
 def task_create(request, project_id):
 
+    logger.info('User %s create task for project %d' % (request.user.username,project_id))
     if request.method == 'POST' and belongs_to_project(request.user, project_id):
         proj = Project.objects.get(pk=project_id)
 
@@ -276,6 +290,8 @@ def task_edit(request, project_id, task_id):
     proj = Project.objects.get(pk=project_id)
     task = Task.objects.get(pk=task_id)
 
+    logger.info('User %s editing task %d for project %d' % (request.user.username,project_id,task_id))
+
     if request.method == 'POST' and belongs_to_project(request.user, project_id):
 
         if task.project == proj:
@@ -304,6 +320,7 @@ def task_edit(request, project_id, task_id):
 def task_delete(request, project_id, task_id):
     proj = Project.objects.get(pk=project_id)
     task = Task.objects.get(pk=task_id)
+    logger.info('User %s deleting task %d from project %d' % (request.user.username,project_id,task_id))
     if proj is not None and belongs_to_project(request.user, project_id):
         if task is not None and task.project == proj:
             task.delete()
@@ -315,6 +332,7 @@ def task_delete(request, project_id, task_id):
 def task_complete(request, project_id, task_id):
     proj = Project.objects.get(pk=project_id)
     task = Task.objects.get(pk=task_id)
+    logger.info('User %s completed task %d for project %d' % (request.user.username,project_id,task_id))
     if proj is not None and belongs_to_project(request.user, project_id):
         if task is not None and task.project == proj:
             task.completed = not task.completed
@@ -400,6 +418,7 @@ def project_delete(request, project_id):
 
 # Authentification functions
 def logout_view(request):
+    logger.info('User %s logout' % (request.user.username))
     logout(request)
     return redirect(request.GET.get('redirect', '/taskManager/'))
 
@@ -412,19 +431,24 @@ def login(request):
         if User.objects.filter(username=username).exists():
             user = authenticate(username=username, password=password)
             if user is not None:
+                logger.info(user)
                 if user.is_active:
+                    logger.info('Succesful Login (%s)' % (username))
                     auth_login(request, user)
                     # Redirect to a success page.
                     return redirect(request.GET.get('next', '/taskManager/'))
                 else:
+                    logger.info('Disabled Account (%s:%s)' % (username,password))
                     # Return a 'disabled account' error message
                     return redirect('/taskManager/', {'disabled_user': True})
             else:
                 # Return an 'invalid login' error message.
+                logger.info('Failed login (%s:%s)' % (username,password))
                 return render(request,
                               'taskManager/login.html',
                               {'failed_login': False, 'username': username})
         else:
+            logger.info('Invalid User (%s:%s)' % (username,password))
             return render(request,
                           'taskManager/login.html',
                           {'invalid_username': False, 'username': username})
@@ -697,7 +721,6 @@ def profile(request):
     return render(request, 'taskManager/profile.html', {'user': request.user})
 
 # Look up profiles by ID
-# Added 8/17 by chris
 
 @login_required
 @csrf_exempt
