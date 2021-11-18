@@ -169,7 +169,7 @@ def manage_groups(request):
 @login_required
 def upload(request, project_id):
 
-    logger.info('User %s upload %d' % (request.user.username,project_id))
+    logger.info('User %s upload %s' % (request.user.username,project_id))
 
     if request.method == 'POST':
 
@@ -220,7 +220,7 @@ def upload(request, project_id):
 @login_required
 def download(request, file_id):
 
-    logger.info('User %s download file %d' % (request.user.username,file_id))
+    logger.info('User %s download file %s' % (request.user.username,file_id))
 
     file = File.objects.get(pk=file_id)
     response = HttpResponse("yo", 200)
@@ -255,7 +255,7 @@ def belongs_to_project(user, project_id):
 @login_required
 def task_create(request, project_id):
 
-    logger.info('User %s create task for project %d' % (request.user.username,project_id))
+    logger.info('User %s create task for project %s' % (request.user.username,project_id))
     if request.method == 'POST' and belongs_to_project(request.user, project_id):
         proj = Project.objects.get(pk=project_id)
 
@@ -290,7 +290,7 @@ def task_edit(request, project_id, task_id):
     proj = Project.objects.get(pk=project_id)
     task = Task.objects.get(pk=task_id)
 
-    logger.info('User %s editing task %d for project %d' % (request.user.username,project_id,task_id))
+    logger.info('User %s editing task %s for project %s' % (request.user.username,project_id,task_id))
 
     if request.method == 'POST' and belongs_to_project(request.user, project_id):
 
@@ -320,7 +320,7 @@ def task_edit(request, project_id, task_id):
 def task_delete(request, project_id, task_id):
     proj = Project.objects.get(pk=project_id)
     task = Task.objects.get(pk=task_id)
-    logger.info('User %s deleting task %d from project %d' % (request.user.username,project_id,task_id))
+    logger.info('User %s deleting task %s from project %s' % (request.user.username,project_id,task_id))
     if proj is not None and belongs_to_project(request.user, project_id):
         if task is not None and task.project == proj:
             task.delete()
@@ -332,7 +332,7 @@ def task_delete(request, project_id, task_id):
 def task_complete(request, project_id, task_id):
     proj = Project.objects.get(pk=project_id)
     task = Task.objects.get(pk=task_id)
-    logger.info('User %s completed task %d for project %d' % (request.user.username,project_id,task_id))
+    logger.info('User %s completed task %s for project %s' % (request.user.username,project_id,task_id))
     if proj is not None and belongs_to_project(request.user, project_id):
         if task is not None and task.project == proj:
             task.completed = not task.completed
