@@ -17,7 +17,6 @@ def store_uploaded_file(title, uploaded_file):
     if not os.path.exists(upload_dir_path):
         os.makedirs(upload_dir_path)
 
-    # A1: Injection (shell)
     # Let's avoid the file corruption race condition!
     os.system(
         "mv " +
