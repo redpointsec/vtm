@@ -66,7 +66,13 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.sessions',
     'django_extensions',
-    'taskManager'
+    'taskManager',
+    'health_check',
+    'health_check.db',
+    'health_check.cache',
+    'health_check.storage',
+    'health_check.contrib.migrations',
+    'health_check.contrib.psutil'
 )
 
 MIDDLEWARE = (
@@ -87,13 +93,20 @@ FILE_UPLOAD_HANDLERS = (
 # Database
 
 DATABASES = {
+    # For SQLite
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'vtmdb',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'vtmdb.sqlite3',
     }
+
+    # For MySQL
+    # 'default': {
+    #    'ENGINE': 'django.db.backends.mysql',
+    #    'NAME': 'vtmdb',
+    #    'USER': 'root',
+    #    'PASSWORD': '',
+    #    'HOST': 'localhost'
+    #}
 }
 
 # Internationalization

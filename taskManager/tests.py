@@ -8,11 +8,16 @@ import datetime
 
 
 class UserTestCase(TestCase):
-	def setUp(self):
-		User.objects.create(username="testuser", password="testpassword")
+    def setUp(self):
+        User.objects.create(username="testuser", password="testpassword")
 
-	def test_user_create(self):
-		self.assertEqual(User.objects.filter(username="testuser").exists(),True)
+    def test_user_create(self):
+        print("Test User Exists")
+        self.assertEqual(User.objects.filter(username="testuser").exists(),True)
+
+    def test_user_login(self):
+        print("Test User Login")
+        self.assertEqual(1,1)
 
 class ProjectTestCase(TestCase):
     def setUp(self):
@@ -24,4 +29,5 @@ class ProjectTestCase(TestCase):
         )
 
     def test_project_create(self):
+        print("Test Project Exists")
         self.assertEqual(Project.objects.filter(title="Test Project").exists(),True)

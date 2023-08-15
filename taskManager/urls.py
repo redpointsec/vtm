@@ -12,4 +12,5 @@ urlpatterns = [
     url(r'^$', index, name='index'),
     url(r'^taskManager/', include(('taskManager.taskManager_urls','taskManager'), namespace="taskManager")),
     url(r'^admin/', admin.site.urls ),
+    url(r'^ht/', include('health_check.urls'))
    ]
