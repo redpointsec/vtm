@@ -2,6 +2,6 @@ mysite.log
 *.sqlite3
 *.pyc
 .DS_Store
-vtm_venv/
+*venv/
 taskManager/static/taskManager/uploads/
 *.log
