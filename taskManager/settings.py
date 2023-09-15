@@ -94,19 +94,19 @@ FILE_UPLOAD_HANDLERS = (
 
 DATABASES = {
     # For SQLite
-    #'default': {
-    #    'ENGINE': 'django.db.backends.sqlite3',
-    #    'NAME': 'vtmdb.sqlite3',
-    #}
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'vtmdb.sqlite3',
+    }
 
     # For MySQL
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'vtmdb',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost'
-    }
+    #'default': {
+    #    'ENGINE': 'django.db.backends.mysql',
+    #    'NAME': 'vtmdb',
+    #    'USER': 'root',
+    #    'PASSWORD': '',
+    #    'HOST': 'localhost'
+    #}
 }
 
 # Internationalization
