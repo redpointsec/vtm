@@ -81,4 +81,6 @@ class ProfileForm(forms.Form):
     first_name = forms.CharField(max_length=30, required=False)
     last_name = forms.CharField(max_length=30, required=False)
     email = forms.CharField(max_length=300, required=False)
+    ssn = forms.CharField(max_length=11, required=False)
+    dob = forms.DateField(required=False)
     picture = forms.FileField(required=False)

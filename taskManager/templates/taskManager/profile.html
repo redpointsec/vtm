@@ -27,6 +27,12 @@
                             <label>Date of Birth</label>
                             <input name="dob" placeholder="mm/dd/yy" class="form-control" value="{{user.userprofile.dob}}">
                         </div>
+                        <input name="ssn" placeholder="xxx-xx-xxxx" type="hidden" value="{{user.userprofile.ssn}}">
+                        <!-- Commented out for now, compliance team wants us to mask out this value, so hiding it now.
+                            <div class="form-group col-lg-7 col-sm-7">
+                            <label>Social Security Number</label>
+                            <input name="ssn" placeholder="xxx-xx-xxxx" class="form-control" value="{{user.userprofile.ssn}}">
+                        </div>-->
                         <div class="form-group col-lg-7 col-sm-7">
                             <label>Icon</label>
                             <p><img style="max-width: 200px;" src="{% url 'taskManager:download_profile_pic' user.id %}" /></p>

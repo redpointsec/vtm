@@ -14,6 +14,7 @@ class UserProfile(models.Model):
     reset_token = models.CharField(max_length=7, default="")
     reset_token_expiration = models.DateTimeField(default=timezone.now)
     dob = models.CharField(max_length=8, default="00/00/00")
+    ssn = models.CharField(max_length=9, default="000-00-0000")
     
 
 class Project(models.Model):

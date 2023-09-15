@@ -5,7 +5,8 @@
     "fields": {
       "image" : "/static/taskManager/img/bot.png",
       "user" : 1,
-      "dob"  : "00/00/00"
+      "dob"  : "00/00/00",
+      "ssn"  : "123-45-6789"
     }
   },
   {
@@ -14,7 +15,8 @@
     "fields": {
       "image" : "/static/taskManager/img/seth.jpg",
       "user" : 2,
-      "dob"  : "02/02/82"
+      "dob"  : "02/02/82",
+      "ssn"  : "123-45-6790"
     }
   },
   {
@@ -23,7 +25,8 @@
     "fields": {
       "image" : "/static/taskManager/img/team/team_img1.jpg",
       "user" : 3,
-      "dob"  : "03/03/83"
+      "dob"  : "03/03/83",
+      "ssn"  : "123-45-6791"
     }
   },
   {
@@ -32,7 +35,8 @@
     "fields": {
       "image" : "/static/taskManager/img/ken.png",
       "user" : 4,
-      "dob"  : "04/04/84"
+      "dob"  : "04/04/84",
+      "ssn": "123-45-6792"
     }
   },
   {
@@ -41,7 +45,8 @@
     "fields": {
       "image" : "/static/taskManager/img/team/team_img3.jpg",
       "user" : 5,
-      "dob"  : "05/05/85"
+      "dob"  : "05/05/85",
+      "ssn"  : "123-45-6793"
     }
   },
   {
@@ -50,7 +55,8 @@
     "fields": {
       "image" : "/static/taskManager/img/pm.png",
       "user" : 6,
-      "dob"  : "05/20/80"
+      "dob"  : "05/20/80",
+      "ssn"  : "123-45-6794"
     }
   }
   

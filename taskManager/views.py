@@ -479,6 +479,8 @@ def register(request):
             user.groups.add(grp)
 
             user.userProfile = UserProfile.objects.create(user=user)
+            user.userProfile.dob = request.POST.get('dob', False)
+            user.userProfile.ssn = request.POST.get('ssn', False)
             user.userProfile.save()
             user.is_active=True
             user.save()
@@ -731,6 +733,9 @@ def profile_by_id(request, user_id):
         form = ProfileForm(request.POST, request.FILES)
         if len(request.POST.get('dob')) > 8:
           raise Exception("Birthday does not match format")
+        # Need to figure out how to handle socials, compliance wants us to mask these
+        # if len(request.POST.get('ssn')) > 11:
+        #  raise Exception("SSN does not match format")
         if form.is_valid():
             if request.POST.get('first_name') != user.first_name:
                 user.first_name = request.POST.get('first_name')
@@ -741,6 +746,9 @@ def profile_by_id(request, user_id):
             if request.POST.get('dob') != user.userprofile.dob:
                 user.userprofile.dob = request.POST.get('dob')
                 user.userprofile.save()
+            if request.POST.get('ssn') != user.userprofile.ssn:
+                user.userprofile.ssn = request.POST.get('ssn')
+                user.userprofile.save()
             if request.POST.get('password'):
                 user.set_password(request.POST.get('password'))
             if request.FILES:
@@ -749,8 +757,10 @@ def profile_by_id(request, user_id):
                 user.userprofile.save()
             user.save()
             messages.info(request, "User Updated")
+    else:
+        form = ProfileForm()
 
-    return render(request, 'taskManager/profile.html', {'user': user})
+    return render(request, 'taskManager/profile.html', {'user': user, 'form': form.as_table})
 
 # Password reset needed
 @csrf_exempt
