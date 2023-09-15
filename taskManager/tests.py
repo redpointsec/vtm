@@ -37,7 +37,7 @@ class UserTestCase(TestCase):
     def test_update_profile(self):
         print("Test Update Profile")
         self.client.login(username="chris", password="test123")
-        data = {'first_name':'Chris', 'last_name':'TestUpdate', 'email':'chris@tm.com', 'dob': '03/03/83'}
+        data = {'first_name':'Chris', 'last_name':'TestUpdate', 'email':'chris@tm.com', 'dob': '03/03/83', 'ssn': '123-45-6789'}
         self.client.post('/taskManager/profile/3', data)
         res = self.client.get("/taskManager/profile/3").content
         self.assertEqual(True, (b"TestUpdate" in res))

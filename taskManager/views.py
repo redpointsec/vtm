@@ -479,8 +479,8 @@ def register(request):
             user.groups.add(grp)
 
             user.userProfile = UserProfile.objects.create(user=user)
-            user.userProfile.dob = request.POST.get('dob', False)
-            user.userProfile.ssn = request.POST.get('ssn', False)
+            user.userProfile.dob = request.POST.get('dob', "99/99/99")
+            user.userProfile.ssn = request.POST.get('ssn', "999-99-9999")
             user.userProfile.save()
             user.is_active=True
             user.save()
