@@ -33,6 +33,8 @@ from taskManager.models import Task, Project, Notes, File, UserProfile
 from taskManager.misc import store_uploaded_file, store_url_data
 from taskManager.forms import UserForm, ProjectFileForm, ProfileForm
 
+from rest_framework.authtoken.models import Token
+
 # Setup logging
 logger = logging.getLogger('django')
 
@@ -438,7 +440,7 @@ def login(request):
                     logger.info('Succesful Login (%s)' % (username))
                     auth_login(request, user)
                     # Redirect to a success page.
-                    return HttpResponseRedirect(request.GET.get('next'))
+                    return HttpResponseRedirect(request.GET.get('next','/taskManager/'))
                 else:
                     logger.info('Disabled Account (%s:%s)' % (username,password))
                     # Return a 'disabled account' error message
@@ -483,6 +485,7 @@ def register(request):
             user.userProfile = UserProfile.objects.create(user=user)
             user.userProfile.dob = request.POST.get('dob', "99/99/99")
             user.userProfile.ssn = request.POST.get('ssn', "999-99-9999")
+            Token.objects.create(user=user)
             user.userProfile.save()
             user.is_active=True
             user.save()

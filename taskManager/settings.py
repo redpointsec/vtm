@@ -66,13 +66,17 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.sessions',
     'django_extensions',
+    'django_filters',
     'taskManager',
     'health_check',
     'health_check.db',
     'health_check.cache',
     'health_check.storage',
     'health_check.contrib.migrations',
-    'health_check.contrib.psutil'
+    'health_check.contrib.psutil',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'drf_spectacular',
 )
 
 MIDDLEWARE = (
@@ -153,6 +157,7 @@ TEMPLATES = [
 ]
 
 LOGIN_URL = '/taskManager/login/'
+# LOGIN_REDIRECT_URL = '/taskManager/dashboard/'
 
 PASSWORD_HASHERS = ['django.contrib.auth.hashers.MD5PasswordHasher']
 
@@ -166,5 +171,23 @@ EMAIL_HOST='localhost'
 EMAIL_PORT = 1025
 
 # Needs compatibility with older Django!
-SESSION_SERIALIZER = "django.contrib.sessions.serializers.PickleSerializer"
+# SESSION_SERIALIZER = "django.contrib.sessions.serializers.PickleSerializer"
 SESSION_COOKIE_HTTPONLY = False
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Task Manager API',
+    'DESCRIPTION': 'Task Manager API for reporting',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'COMPONENT_SPLIT_REQUEST': True,
+}

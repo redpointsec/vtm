@@ -4,8 +4,6 @@ import datetime
 from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
-from django.utils.timezone import utc
-import django.utils.timezone
 
 
 class Migration(migrations.Migration):
@@ -24,7 +22,7 @@ class Migration(migrations.Migration):
                 ('title', models.CharField(default='Default', max_length=50)),
                 ('text', models.CharField(max_length=500)),
                 ('start_date', models.DateTimeField(verbose_name='date started')),
-                ('due_date', models.DateTimeField(default=datetime.datetime(2023, 9, 22, 19, 57, 48, 828867, tzinfo=utc), verbose_name='date due')),
+                ('due_date', models.DateTimeField(default=datetime.datetime(2023, 9, 22, 19, 57, 48, 828867, tzinfo=datetime.timezone.utc), verbose_name='date due')),
                 ('priority', models.IntegerField(default=1)),
                 ('users_assigned', models.ManyToManyField(to=settings.AUTH_USER_MODEL)),
             ],
@@ -48,7 +46,7 @@ class Migration(migrations.Migration):
                 ('text', models.TextField(blank=True)),
                 ('title', models.CharField(default='N/A', max_length=1024)),
                 ('start_date', models.DateTimeField(verbose_name='date created')),
-                ('due_date', models.DateTimeField(default=datetime.datetime(2023, 9, 22, 19, 57, 48, 829195, tzinfo=utc), verbose_name='date due')),
+                ('due_date', models.DateTimeField(default=datetime.datetime(2023, 9, 22, 19, 57, 48, 829195, tzinfo=datetime.timezone.utc), verbose_name='date due')),
                 ('completed', models.BooleanField(default=False, null=True)),
                 ('project', models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='taskManager.project')),
                 ('users_assigned', models.ManyToManyField(to=settings.AUTH_USER_MODEL)),
