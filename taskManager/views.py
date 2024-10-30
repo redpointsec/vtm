@@ -11,7 +11,9 @@ import io
 import uuid
 import logging
 
-
+from django.http import (
+    HttpResponse,  HttpResponseRedirect,
+)
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.utils import timezone
@@ -436,7 +438,7 @@ def login(request):
                     logger.info('Succesful Login (%s)' % (username))
                     auth_login(request, user)
                     # Redirect to a success page.
-                    return redirect(request.GET.get('next', '/taskManager/'))
+                    return HttpResponseRedirect(request.GET.get('next'))
                 else:
                     logger.info('Disabled Account (%s:%s)' % (username,password))
                     # Return a 'disabled account' error message
