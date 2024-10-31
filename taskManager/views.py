@@ -728,11 +728,6 @@ def search(request):
 @login_required
 def profile(request):
     return render(request, 'taskManager/profile.html', {'user': request.user})
-
-
-@login_required
-def profile(request, user_id):
-    user = User.objects.get(pk=user_id)
     
 
 # Look up profiles by ID
@@ -742,7 +737,7 @@ def profile(request, user_id):
 def profile_by_id(request, user_id):
     user = User.objects.get(pk=user_id)
     group_names = ", ".join(user.groups.values_list('name', flat=True))  # Get the user's groups as a comma-separated string
-    print(group_names)
+    
     if request.method == 'POST':
         form = ProfileForm(request.POST, request.FILES)
         if len(request.POST.get('dob')) > 8:
@@ -771,7 +766,7 @@ def profile_by_id(request, user_id):
             if request.POST.get('password'):
                 user.set_password(request.POST.get('password'))
             if request.FILES:
-                user.userprofile.image = store_uploaded_file(user.get_full_name() + "." + request.FILES['picture'].name.split(".")[-1], request.FILES['picture'])
+                user.userprofile.image = store_uploaded_file( str(uuid.uuid4()) +  "." + request.FILES['picture'].name.split(".")[-1], request.FILES['picture'])
                 user.userprofile.save()
             user.save()
             messages.info(request, "User Updated")
