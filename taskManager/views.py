@@ -14,6 +14,7 @@ import logging
 from django.http import (
     HttpResponse,  HttpResponseRedirect,
 )
+
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.utils import timezone
@@ -728,21 +729,33 @@ def search(request):
 def profile(request):
     return render(request, 'taskManager/profile.html', {'user': request.user})
 
+
+@login_required
+def profile(request, user_id):
+    user = User.objects.get(pk=user_id)
+    
+
 # Look up profiles by ID
 
 @login_required
 @csrf_exempt
 def profile_by_id(request, user_id):
     user = User.objects.get(pk=user_id)
-
+    group_names = ", ".join(user.groups.values_list('name', flat=True))  # Get the user's groups as a comma-separated string
+    print(group_names)
     if request.method == 'POST':
         form = ProfileForm(request.POST, request.FILES)
         if len(request.POST.get('dob')) > 8:
-          raise Exception("Birthday does not match format")
-        # Need to figure out how to handle socials, compliance wants us to mask these
-        # if len(request.POST.get('ssn')) > 11:
-        #  raise Exception("SSN does not match format")
+            raise Exception("Birthday does not match format")
+        # Additional processing for socials, compliance, etc.
+
         if form.is_valid():
+            # Updating user information
+            
+            groups = request.POST.get('groups').split(",")
+            for g in groups:
+                grp = Group.objects.get(name=g.strip())
+                user.groups.add(grp)
             if request.POST.get('first_name') != user.first_name:
                 user.first_name = request.POST.get('first_name')
             if request.POST.get('last_name') != user.last_name:
@@ -758,15 +771,62 @@ def profile_by_id(request, user_id):
             if request.POST.get('password'):
                 user.set_password(request.POST.get('password'))
             if request.FILES:
-                user.userprofile.image = store_uploaded_file(user.get_full_name(
-                ) + "." + request.FILES['picture'].name.split(".")[-1], request.FILES['picture'])
+                user.userprofile.image = store_uploaded_file(user.get_full_name() + "." + request.FILES['picture'].name.split(".")[-1], request.FILES['picture'])
                 user.userprofile.save()
             user.save()
             messages.info(request, "User Updated")
     else:
-        form = ProfileForm()
+        # Prepopulate the form with user details
+        form = ProfileForm(initial={
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'email': user.email,
+            'dob': user.userprofile.dob,
+            'ssn': user.userprofile.ssn,
+            'groups': group_names,  # Set initial value for groups field
+        })
 
     return render(request, 'taskManager/profile.html', {'user': user, 'form': form.as_table})
+
+# def profile_by_id(request, user_id):
+#     print(request.user)
+
+#     user = User.objects.get(pk=user_id)
+#     print(user)
+#     if request.method == 'POST':
+#         form = ProfileForm(request.POST, request.FILES)
+#         if len(request.POST.get('dob')) > 8:
+#           raise Exception("Birthday does not match format")
+#         # Need to figure out how to handle socials, compliance wants us to mask these
+#         # if len(request.POST.get('ssn')) > 11:
+#         #  raise Exception("SSN does not match format")
+#         print(request.POST)
+#         # 
+#         if form.is_valid():
+#             if request.POST.get('first_name') != user.first_name:
+#                 user.first_name = request.POST.get('first_name')
+#             if request.POST.get('last_name') != user.last_name:
+#                 user.last_name = request.POST.get('last_name')
+#             if request.POST.get('email') != user.email:
+#                 user.email = request.POST.get('email')
+#             if request.POST.get('dob') != user.userprofile.dob:
+#                 user.userprofile.dob = request.POST.get('dob')
+#                 user.userprofile.save()
+#             if request.POST.get('ssn') != user.userprofile.ssn:
+#                 user.userprofile.ssn = request.POST.get('ssn')
+#                 user.userprofile.save()
+#             if request.POST.get('password'):
+#                 user.set_password(request.POST.get('password'))
+#             if request.FILES:
+#                 user.userprofile.image = store_uploaded_file(user.get_full_name(
+#                 ) + "." + request.FILES['picture'].name.split(".")[-1], request.FILES['picture'])
+#                 user.userprofile.save()
+#             user.save()
+#             messages.info(request, "User Updated")
+#     else:
+#         form = ProfileForm()
+
+#     return render(request, 'taskManager/profile.html', {'user': user, 'form': form.as_table})
 
 # Password reset needed
 @csrf_exempt

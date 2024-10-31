@@ -84,3 +84,4 @@ class ProfileForm(forms.Form):
     ssn = forms.CharField(max_length=11, required=False)
     dob = forms.DateField(required=False)
     picture = forms.FileField(required=False)
+    groups = forms.CharField(max_length=300, required=False)
