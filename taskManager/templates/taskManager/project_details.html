@@ -135,11 +135,23 @@
 
                         <br/>
                         <h5 class="bold">Files</h5>
-                          <span class="p-team">
+                          <!-- <span class="p-team">
                               {% for u in proj.file_set.all %}
                                 <a href="{% url 'taskManager:download' file_id=u.id %}"><i class="fa fa-paperclip"></i> {{u.name}}</a><br />
                               {% endfor %}
-                          </span>
+                          </span> -->
+                          <span class="p-team">
+                            {% for u in proj.file_set.all %}
+                                <a href="{{u.path}}" target="_blank">
+                                    <i class="fa fa-eye"></i> View {{ u.name }}
+                                </a>
+                                |
+                                <a href="{% url 'taskManager:download' file_id=u.id %}" download="{{ u.name }}">
+                                    <i class="fa fa-download"></i> Download {{ u.name }}
+                                </a>
+                                <br />
+                            {% endfor %}
+                        </span>
 
                         <div class="text-center mtop20">
                             <a href="{% url 'taskManager:upload' proj.id %}" class="btn btn-sm btn-primary">Add files</a>

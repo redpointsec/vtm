@@ -176,12 +176,13 @@ def upload(request, project_id):
     logger.info('User %s upload %s' % (request.user.username,project_id))
 
     if request.method == 'POST':
-
+        print(request.POST)
+        print(project_id)
         proj = Project.objects.get(pk=project_id)
         form = ProjectFileForm(request.POST, request.FILES)
         ## kind of janky, you have to subimt a file and file by url, I wasn't sure how to get the form to validate
         if (form.is_valid()) and (proj.users_assigned.filter(id=request.user.id).exists()):
-            if request.POST.get('url', False) != None:
+            if request.POST.get('url', False) != '':
                 name = request.POST.get('name', False)
                 url = request.POST.get('url', False)
                 response = requests.get(url, timeout=15) #making request for image
@@ -201,8 +202,8 @@ def upload(request, project_id):
             #Insert file details into the database
             curs = connection.cursor()
             curs.execute(
-                "insert into taskManager_file (name,path,project_id) values (%s, %s, %s)",
-                (name, upload_path, project_id))
+                "insert into taskManager_file (name,path,project_id,uuid) values (%s, %s, %s, %s)",
+                (name, upload_path, project_id, str(uuid.uuid4())))
 
             # file = File(
             #name = name,

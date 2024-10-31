@@ -1,46 +1,58 @@
 {% extends 'taskManager/base_backend.html' %}
 
-  {% block content %}
-  {% include 'taskManager/messages.html'%}
-  <section class="wrapper">
-  <div class="row">
-    <div class="col-lg-6">
-        <section class="panel">
-            <header class="panel-heading">
-                Upload a file
-            </header>
-            <div class="panel-body">
-                <form method="post" role="form" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label>File Name (required)</label>
-                        <input id="id_name" maxlength="300" name="name" type="text" value="{{name}}" required/>
-                    </div>
-                    <div class="form-group">
-                         <label>Upload with Url</label>
-                        <input id="url" name="url" type="input" value="{{url}}" />
-                    </div>
-                    <p>OR</p>
-                    <div class="form-group">
-                        <input id="id_file" name="file" type="file" />
-                    </div>
-                     
-                    <button type="submit" class="btn btn-info">Upload</button>
-                </form>
+{% block content %}
+{% include 'taskManager/messages.html' %}
+<section class="wrapper">
+    <div class="row">
+        <div class="col-lg-6">
+            <section class="panel">
+                <header class="panel-heading">
+                    Upload a file
+                </header>
+                <div class="panel-body">
+                    <form method="post" role="form" enctype="multipart/form-data" onsubmit="return validateFileType()">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label>File Name (required)</label>
+                            <input id="id_name" maxlength="300" name="name" type="text" value="{{name}}" required/>
+                        </div>
+                        <div class="form-group">
+                            <label>Upload with Url</label>
+                            <input id="url" name="url" type="input" value="{{url}}" />
+                        </div>
+                        <p>OR</p>
+                        <div class="form-group">
+                            <input id="id_file" name="file" type="file" />
+                        </div>
+                        <button type="submit" class="btn btn-info">Upload</button>
+                    </form>
 
-                {% if data %}
-                <br><br>
-                <hr>
-                <b>Error retrieving image, data received:</b><br>
-                <pre>{{data}}</pre>
-                <hr>
-                {% endif %}
+                    {% if data %}
+                    <br><br>
+                    <hr>
+                    <b>Error retrieving image, data received:</b><br>
+                    <pre>{{data}}</pre>
+                    <hr>
+                    {% endif %}
 
-            </div>
-        </section>
+                </div>
+            </section>
+        </div>
     </div>
+</section>
 
-  </div>
-  </section>
+<script>
+    function validateFileType() {
+        const fileInput = document.getElementById('id_file');
+        const filePath = fileInput.value;
+        const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.pdf)$/i;
 
-{%  endblock %}
+        if (fileInput.files.length > 0 && !allowedExtensions.exec(filePath)) {
+            alert('Please upload a file in JPG, PNG, or PDF format.');
+            fileInput.value = ''; // Clear the input
+            return false;
+        }
+        return true;
+    }
+</script>
+{% endblock %}
