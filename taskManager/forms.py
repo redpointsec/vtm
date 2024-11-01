@@ -53,8 +53,7 @@ def get_my_choices_projects():
         counter = counter + 1
     return proj_tuple
 
-# A2: Broken Authentication and Session Management
-
+# Forms for the application
 
 class UserForm(forms.ModelForm):
     """ User registration form """
