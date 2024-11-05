@@ -39,6 +39,60 @@ from rest_framework.authtoken.models import Token
 # Setup logging
 logger = logging.getLogger('django')
 
+
+from django.http import JsonResponse
+from rest_framework_simplejwt.tokens import RefreshToken
+
+from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect, JsonResponse
+from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
+from rest_framework_simplejwt.tokens import RefreshToken
+import logging
+
+logger = logging.getLogger(__name__)
+
+def login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username', False)
+        password = request.POST.get('password', False)
+
+        # Check if the user exists
+        if User.objects.filter(username=username).exists():
+            user = authenticate(request, username=username, password=password)
+
+            # If authentication is successful
+            if user is not None:
+                logger.info(user)
+                if user.is_active:
+                    # Generate JWT tokens
+                    refresh = RefreshToken.for_user(user)
+                    access_token = str(refresh.access_token)
+
+                    logger.info('Successful Login (%s)' % (username))
+                    # Set tokens in cookies (for client-side use)
+                    response = HttpResponseRedirect(request.GET.get('next', '/taskManager/'))
+                    response.set_cookie('access_token', access_token, httponly=True, secure=False)
+                    response.set_cookie('refresh_token', str(refresh), httponly=True, secure=False)
+
+                    return response
+                else:
+                    logger.info('Disabled Account (%s:%s)' % (username, password))
+                    # Render with 'disabled account' error message
+                    return render(request, 'taskManager/login.html', {'disabled_user': True})
+            else:
+                # Invalid login credentials
+                logger.info('Failed login (%s:%s)' % (username, password))
+                return render(request, 'taskManager/login.html', {'failed_login': True, 'username': username})
+        else:
+            # Invalid user
+            logger.info('Invalid User (%s:%s)' % (username, password))
+            return render(request, 'taskManager/login.html', {'invalid_username': True, 'username': username})
+
+    # If the request is not POST, render the login page
+    return render(request, 'taskManager/login.html', {})
+
+
 @login_required
 def manage_tasks(request, project_id):
 
@@ -429,37 +483,37 @@ def logout_view(request):
     return redirect(request.GET.get('redirect', '/taskManager/'))
 
 
-def login(request):
-    if request.method == 'POST':
-        username = request.POST.get('username', False)
-        password = request.POST.get('password', False)
+# def login(request):
+#     if request.method == 'POST':
+#         username = request.POST.get('username', False)
+#         password = request.POST.get('password', False)
 
-        if User.objects.filter(username=username).exists():
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                logger.info(user)
-                if user.is_active:
-                    logger.info('Succesful Login (%s)' % (username))
-                    auth_login(request, user)
-                    # Redirect to a success page.
-                    return HttpResponseRedirect(request.GET.get('next','/taskManager/'))
-                else:
-                    logger.info('Disabled Account (%s:%s)' % (username,password))
-                    # Return a 'disabled account' error message
-                    return redirect('/taskManager/', {'disabled_user': True})
-            else:
-                # Return an 'invalid login' error message.
-                logger.info('Failed login (%s:%s)' % (username,password))
-                return render(request,
-                              'taskManager/login.html',
-                              {'failed_login': False, 'username': username})
-        else:
-            logger.info('Invalid User (%s:%s)' % (username,password))
-            return render(request,
-                          'taskManager/login.html',
-                          {'invalid_username': False, 'username': username})
-    else:
-        return render(request,'taskManager/login.html', {})
+#         if User.objects.filter(username=username).exists():
+#             user = authenticate(username=username, password=password)
+#             if user is not None:
+#                 logger.info(user)
+#                 if user.is_active:
+#                     logger.info('Succesful Login (%s)' % (username))
+#                     auth_login(request, user)
+#                     # Redirect to a success page.
+#                     return HttpResponseRedirect(request.GET.get('next','/taskManager/'))
+#                 else:
+#                     logger.info('Disabled Account (%s:%s)' % (username,password))
+#                     # Return a 'disabled account' error message
+#                     return redirect('/taskManager/', {'disabled_user': True})
+#             else:
+#                 # Return an 'invalid login' error message.
+#                 logger.info('Failed login (%s:%s)' % (username,password))
+#                 return render(request,
+#                               'taskManager/login.html',
+#                               {'failed_login': False, 'username': username})
+#         else:
+#             logger.info('Invalid User (%s:%s)' % (username,password))
+#             return render(request,
+#                           'taskManager/login.html',
+#                           {'invalid_username': False, 'username': username})
+#     else:
+#         return render(request,'taskManager/login.html', {})
 
 
 def register(request):
