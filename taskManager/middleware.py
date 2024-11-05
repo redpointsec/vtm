@@ -12,15 +12,9 @@ from rest_framework_simplejwt.tokens import AccessToken
 
 class JWTAuthenticationMiddleware(MiddlewareMixin):
     def process_request(self, request):
-        auth_header = request.META.get("HTTP_COOKIE", None)
-        if auth_header:
+        token = request.COOKIES.get("access_token")
+        if token:
             try:
-                tokens = auth_header.split("; ")
-                for i in tokens:
-                    if "access_token" in i:
-                        token = i.split("access_token=")[1]
-                        break
-                     # Expect "Bearer <token>"
                 validated_token = AccessToken(token)
                 user_id = validated_token["user_id"]
                 user = User.objects.get(id=user_id)
