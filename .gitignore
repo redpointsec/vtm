@@ -5,3 +5,4 @@ mysite.log
 *venv/
 taskManager/static/taskManager/uploads/
 *.log
+chatbot/.env
