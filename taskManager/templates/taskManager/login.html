@@ -3,6 +3,11 @@
 
         {% block content %}
         {% include 'taskManager/messages.html'%}
+        {% if account_locked == False %}
+
+        <h3>Account Locked. Please reset password</h3>
+
+        {% endif %}
         {% if failed_login == False %}
 
         <h3>Login failed. Please try again</h3>

@@ -49,13 +49,25 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 import logging
+from django.conf import settings
 
 logger = logging.getLogger(__name__)
+
+MAX_FAILED_ATTEMPTS = 5
+LOCKOUT_TIME = 300
 
 def login(request):
     if request.method == 'POST':
         username = request.POST.get('username', False)
         password = request.POST.get('password', False)
+
+        # Redis key for tracking failed attempts
+        redis_key = f"failed_logins:{username}"
+        # Check if account is locked
+        if settings.REDIS.exists(redis_key) and int(settings.REDIS.get(redis_key)) >= MAX_FAILED_ATTEMPTS:
+            # Account is locked, show lockout message
+            logger.warning(f"Account locked due to failed login attempts: {username}")
+            return render(request, 'taskManager/login.html', {'account_locked': False, 'username': username})
 
         # Check if the user exists
         if User.objects.filter(username=username).exists():
@@ -63,34 +75,44 @@ def login(request):
 
             # If authentication is successful
             if user is not None:
-                logger.info(user)
                 if user.is_active:
                     # Generate JWT tokens
                     refresh = RefreshToken.for_user(user)
                     access_token = str(refresh.access_token)
-
                     logger.info('Successful Login (%s)' % (username))
                     # Set tokens in cookies (for client-side use)
                     response = HttpResponseRedirect(request.GET.get('next', '/taskManager/'))
                     response.set_cookie('access_token', access_token, httponly=False, secure=False)
                     response.set_cookie('refresh_token', str(refresh), httponly=False, secure=False)
-
+                    # Reset failed attempts after successful login
+                    settings.REDIS.delete(redis_key)
                     return response
                 else:
                     logger.info('Disabled Account (%s:%s)' % (username, password))
                     # Render with 'disabled account' error message
                     return render(request, 'taskManager/login.html', {'disabled_user': True})
             else:
-                # Invalid login credentials
-                logger.info('Failed login (%s:%s)' % (username, password))
-                return render(request, 'taskManager/login.html', {'failed_login': True, 'username': username})
+                # Failed login attempt - increment the Redis counter
+                failed_attempts = settings.REDIS.incr(redis_key)
+                if failed_attempts == 1:
+                    # Set expiration on first failed attempt
+                    settings.REDIS.expire(redis_key, LOCKOUT_TIME)
+                
+                if failed_attempts >= MAX_FAILED_ATTEMPTS:
+                    logger.warning(f"Account locked due to multiple failed login attempts: {username}")
+                    return render(request, 'taskManager/login.html', {'account_locked': False, 'username': username})
+                else:
+                    logger.info('Failed login (%s:%s)' % (username, password))#some insecure logging as well
+                    return render(request, 'taskManager/login.html', {'failed_login': False, 'username': username})
         else:
             # Invalid user
-            logger.info('Invalid User (%s:%s)' % (username, password))
-            return render(request, 'taskManager/login.html', {'invalid_username': True, 'username': username})
+            logger.info('Invalid User (%s:%s)' % (username, password)) #some insecure logging as well 
+            return render(request, 'taskManager/login.html', {'invalid_username': False, 'username': username})
 
     # If the request is not POST, render the login page
     return render(request, 'taskManager/login.html', {})
+
+
 
 
 @login_required
@@ -483,38 +505,6 @@ def logout_view(request):
     return redirect(request.GET.get('redirect', '/taskManager/'))
 
 
-# def login(request):
-#     if request.method == 'POST':
-#         username = request.POST.get('username', False)
-#         password = request.POST.get('password', False)
-
-#         if User.objects.filter(username=username).exists():
-#             user = authenticate(username=username, password=password)
-#             if user is not None:
-#                 logger.info(user)
-#                 if user.is_active:
-#                     logger.info('Succesful Login (%s)' % (username))
-#                     auth_login(request, user)
-#                     # Redirect to a success page.
-#                     return HttpResponseRedirect(request.GET.get('next','/taskManager/'))
-#                 else:
-#                     logger.info('Disabled Account (%s:%s)' % (username,password))
-#                     # Return a 'disabled account' error message
-#                     return redirect('/taskManager/', {'disabled_user': True})
-#             else:
-#                 # Return an 'invalid login' error message.
-#                 logger.info('Failed login (%s:%s)' % (username,password))
-#                 return render(request,
-#                               'taskManager/login.html',
-#                               {'failed_login': False, 'username': username})
-#         else:
-#             logger.info('Invalid User (%s:%s)' % (username,password))
-#             return render(request,
-#                           'taskManager/login.html',
-#                           {'invalid_username': False, 'username': username})
-#     else:
-#         return render(request,'taskManager/login.html', {})
-
 
 def register(request):
 
@@ -837,45 +827,6 @@ def profile_by_id(request, user_id):
 
     return render(request, 'taskManager/profile.html', {'user': user, 'form': form.as_table})
 
-# def profile_by_id(request, user_id):
-#     print(request.user)
-
-#     user = User.objects.get(pk=user_id)
-#     print(user)
-#     if request.method == 'POST':
-#         form = ProfileForm(request.POST, request.FILES)
-#         if len(request.POST.get('dob')) > 8:
-#           raise Exception("Birthday does not match format")
-#         # Need to figure out how to handle socials, compliance wants us to mask these
-#         # if len(request.POST.get('ssn')) > 11:
-#         #  raise Exception("SSN does not match format")
-#         print(request.POST)
-#         # 
-#         if form.is_valid():
-#             if request.POST.get('first_name') != user.first_name:
-#                 user.first_name = request.POST.get('first_name')
-#             if request.POST.get('last_name') != user.last_name:
-#                 user.last_name = request.POST.get('last_name')
-#             if request.POST.get('email') != user.email:
-#                 user.email = request.POST.get('email')
-#             if request.POST.get('dob') != user.userprofile.dob:
-#                 user.userprofile.dob = request.POST.get('dob')
-#                 user.userprofile.save()
-#             if request.POST.get('ssn') != user.userprofile.ssn:
-#                 user.userprofile.ssn = request.POST.get('ssn')
-#                 user.userprofile.save()
-#             if request.POST.get('password'):
-#                 user.set_password(request.POST.get('password'))
-#             if request.FILES:
-#                 user.userprofile.image = store_uploaded_file(user.get_full_name(
-#                 ) + "." + request.FILES['picture'].name.split(".")[-1], request.FILES['picture'])
-#                 user.userprofile.save()
-#             user.save()
-#             messages.info(request, "User Updated")
-#     else:
-#         form = ProfileForm()
-
-#     return render(request, 'taskManager/profile.html', {'user': user, 'form': form.as_table})
 
 # Password reset needed
 @csrf_exempt
@@ -910,7 +861,9 @@ def reset_password(request):
         userprofile.reset_token_expiration = timezone.now()
         userprofile.user.save()
         userprofile.save()
-
+        user = User.objects.get(pk=userprofile.pk)
+        redis_key = f"failed_logins:{user.username}"
+        settings.REDIS.delete(redis_key)
         messages.success(request, 'Password has been successfully reset')
         return redirect('/taskManager/login')
 
