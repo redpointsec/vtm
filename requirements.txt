@@ -12,3 +12,4 @@ django-extensions
 djangorestframework
 drf-spectacular
 django-filter
+djangorestframework-simplejwt

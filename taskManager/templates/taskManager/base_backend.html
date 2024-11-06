@@ -25,7 +25,17 @@
     <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-
+    <script>
+        function logout() {
+            // Remove JWT cookies by setting them with a past expiration date
+            console.log("Logging out...");
+            document.cookie = "access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            document.cookie = "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            
+            // Redirect to login page
+            window.location.href = "/taskManager/login";
+        }
+    </script>
     </head>
 <body>
   <section id="container">
@@ -61,7 +71,7 @@
                           <li><a href="{% url 'taskManager:profile_by_id' user.id %}"><i class="fa fa-cog"></i>Profile</a></li>
                         {% endif %}
                         <li><a href="/taskManager/change_password"><i class="fa fa-lock"></i>Change PW</a></li>
-                        <li><a href="/taskManager/logout?redirect=/taskManager/"><i class="fa fa-sign-out"></i>Log Out</a></li>
+                        <li><a href="#" onclick="logout()"><i class="fa fa-sign-out"></i>Log Out</a></li>
                     </ul>
                 </li>
 
