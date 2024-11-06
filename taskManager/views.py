@@ -72,8 +72,8 @@ def login(request):
                     logger.info('Successful Login (%s)' % (username))
                     # Set tokens in cookies (for client-side use)
                     response = HttpResponseRedirect(request.GET.get('next', '/taskManager/'))
-                    response.set_cookie('access_token', access_token, httponly=True, secure=False)
-                    response.set_cookie('refresh_token', str(refresh), httponly=True, secure=False)
+                    response.set_cookie('access_token', access_token, httponly=False, secure=False)
+                    response.set_cookie('refresh_token', str(refresh), httponly=False, secure=False)
 
                     return response
                 else:
