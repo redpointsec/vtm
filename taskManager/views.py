@@ -31,7 +31,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import user_passes_test, login_required
 
 from taskManager.models import Task, Project, Notes, File, UserProfile
-from taskManager.misc import store_uploaded_file, store_url_data
+from taskManager.misc import store_uploaded_file, store_url_data, store_uploaded_img
 from taskManager.forms import UserForm, ProjectFileForm, ProfileForm
 
 from rest_framework.authtoken.models import Token
@@ -810,7 +810,7 @@ def profile_by_id(request, user_id):
             if request.POST.get('password'):
                 user.set_password(request.POST.get('password'))
             if request.FILES:
-                user.userprofile.image = store_uploaded_file( str(uuid.uuid4()) +  "." + request.FILES['picture'].name.split(".")[-1], request.FILES['picture'])
+                user.userprofile.image = store_uploaded_img( str(uuid.uuid4()) +  "." + request.FILES['picture'].name.split(".")[-1], request.FILES['picture'])
                 user.userprofile.save()
             user.save()
             messages.info(request, "User Updated")
