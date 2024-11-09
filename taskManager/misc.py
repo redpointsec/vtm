@@ -26,6 +26,7 @@ def store_uploaded_file(title, uploaded_file):
         " " +
         destination_path
     )
+    os.chmod(destination_path, 0o644)
     return '/static/taskManager/uploads/%s' % (title)
 
 def store_uploaded_img(title, uploaded_file):
@@ -45,6 +46,7 @@ def store_uploaded_img(title, uploaded_file):
         " " +
         destination_path
     )
+    os.chmod(destination_path, 0o644)
     return '/static/taskManager/img/%s' % (title)
 
 def store_url_data(url, _file):
