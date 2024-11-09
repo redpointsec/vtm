@@ -12,8 +12,7 @@ import os
 
 def store_uploaded_file(title, uploaded_file):
     """ Stores a temporary uploaded file on disk """
-    upload_dir_path = '/home/ec2-user/static-tm/taskManager/uploads' % (
-        os.path.dirname(os.path.realpath(__file__)))
+    upload_dir_path = '/home/ec2-user/static-tm/taskManager/uploads'
     if not os.path.exists(upload_dir_path):
         os.makedirs(upload_dir_path)
 
@@ -30,8 +29,9 @@ def store_uploaded_file(title, uploaded_file):
 
 def store_uploaded_img(title, uploaded_file):
     """ Stores a temporary uploaded file on disk """
-    upload_dir_path = '/home/ec2-user/static-tm/taskManager/img' % (
-        os.path.dirname(os.path.realpath(__file__)))
+    # Static path without formatting
+    upload_dir_path = '/home/ec2-user/static-tm/taskManager/img'
+    
     if not os.path.exists(upload_dir_path):
         os.makedirs(upload_dir_path)
 
@@ -40,9 +40,8 @@ def store_uploaded_img(title, uploaded_file):
         "mv " +
         uploaded_file.temporary_file_path() +
         " " +
-        "%s/%s" %
-        (upload_dir_path,
-         title))
+        "%s/%s" % (upload_dir_path, title)
+    )
 
     return '/static/taskManager/img/%s' % (title)
 
