@@ -17,14 +17,15 @@ def store_uploaded_file(title, uploaded_file):
         os.makedirs(upload_dir_path)
 
     # Let's avoid the file corruption race condition!
+    destination_path = os.path.join(upload_dir_path, title)
+    
+    # Move the file to the destination
     os.system(
         "mv " +
         uploaded_file.temporary_file_path() +
         " " +
-        "%s/%s" %
-        (upload_dir_path,
-         title))
-
+        destination_path
+    )
     return '/static/taskManager/uploads/%s' % (title)
 
 def store_uploaded_img(title, uploaded_file):
@@ -35,14 +36,15 @@ def store_uploaded_img(title, uploaded_file):
     if not os.path.exists(upload_dir_path):
         os.makedirs(upload_dir_path)
 
-    # Let's avoid the file corruption race condition!
+    destination_path = os.path.join(upload_dir_path, title)
+    
+    # Move the file to the destination
     os.system(
         "mv " +
         uploaded_file.temporary_file_path() +
         " " +
-        "%s/%s" % (upload_dir_path, title)
+        destination_path
     )
-
     return '/static/taskManager/img/%s' % (title)
 
 def store_url_data(url, _file):
