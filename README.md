@@ -42,7 +42,7 @@ Running vtm
  13. `cp env.list .env`
  14. Paste Open AI API key into .env file
  15. `cd chatBot`
- 16. `streamlit run main.py &, cd ..; ./manage.py runserver` 
+ 16. `streamlit run main.py &; cd ..; ./manage.py runserver` 
  Navigate to http://localhost:8000
  Login with the username `chris` and a password of `test123`
  Navigate to `http://localhost:8502` for the AI Chatbot
