@@ -1,5 +1,5 @@
 asgiref
-Django==5.1.2
+Django==5.1.4
 mysqlclient
 pytz
 sqlparse
