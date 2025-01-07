@@ -468,13 +468,18 @@ def project_edit(request, project_id):
 
     proj = Project.objects.get(pk=project_id)
 
+    params = {}
     if request.method == 'POST':
+        params = request.POST.dict()
+    else:
+        params = request.GET.dict()
 
-        title = request.POST.get('title', False)
-        text = request.POST.get('text', False)
-        project_priority = int(request.POST.get('project_priority', False))
+    if params.get('title') and params.get('text') and params.get('project_priority') and params.get('project_duedate'):
+        title = params.get('title', False)
+        text = params.get('text', False)
+        project_priority = int(params.get('project_priority', False))
         project_duedate = timezone.make_aware(datetime.datetime.strptime(
-            request.POST.get('project_duedate', False),'%Y-%m-%d'))
+            params.get('project_duedate', False),'%Y-%m-%d'))
 
         proj.title = title
         proj.text = text
