@@ -264,11 +264,14 @@ def upload(request, project_id):
             if request.POST.get('url', False) != '':
                 name = request.POST.get('name', False)
                 url = request.POST.get('url', False)
+                extension = url.split(".")[-1].split("?")[0]
+                if not name.endswith(extension):
+                    name = name + "." + extension
                 response = requests.get(url, timeout=15) #making request for image
                 _file = response.content # taking response content and storing it in _file var
                 content_type = response.headers["Content-Type"]
                 if "image" in content_type:
-                    upload_path = store_url_data(url, _file)
+                    upload_path = store_url_data(url, guid, name, _file)
                 else:
                     messages.warning(request, "Error in URL Upload")
                     # I don't know how to return the data _file.decode("utf-8")
