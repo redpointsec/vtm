@@ -20,6 +20,7 @@ from django.http import HttpResponse
 from django.utils import timezone
 from django.template import RequestContext
 from django.db import connection
+from django.conf import settings
 
 from django.views.decorators.csrf import csrf_exempt
 
@@ -259,6 +260,7 @@ def upload(request, project_id):
         form = ProjectFileForm(request.POST, request.FILES)
         ## kind of janky, you have to subimt a file and file by url, I wasn't sure how to get the form to validate
         if (form.is_valid()) and (proj.users_assigned.filter(id=request.user.id).exists()):
+            guid = str(uuid.uuid4())
             if request.POST.get('url', False) != '':
                 name = request.POST.get('name', False)
                 url = request.POST.get('url', False)
@@ -273,14 +275,15 @@ def upload(request, project_id):
                     return render(request, 'taskManager/upload.html', {'data': (_file.decode("utf-8"),"Good effort but we can't give you everything!")["security-credentials" in url] , 'name': name, 'url': url })
 
             else:
-                name = request.POST.get('name', False)
-                upload_path = store_uploaded_file(name, request.FILES['file'])
+                extension = request.FILES['file'].name.split(".")[-1]
+                name = request.POST.get('name', False) + "." + extension
+                upload_path = store_uploaded_file(name, guid, request.FILES['file'])
 
             #Insert file details into the database
             curs = connection.cursor()
             curs.execute(
                 "insert into taskManager_file (name,path,project_id,uuid) values (%s, %s, %s, %s)",
-                (name, upload_path, project_id, str(uuid.uuid4())))
+                (name, upload_path, project_id, guid))
 
             # file = File(
             #name = name,
@@ -308,12 +311,10 @@ def download(request, file_id):
     response = HttpResponse("yo", 200)
     if file.project.users_assigned.filter(id=request.user.id).exists():
         abspath = open(
-            os.path.dirname(
-                os.path.realpath(__file__)) +
-            file.path,
+            settings.MEDIA_ROOT + "/" + str(file.uuid) + "/" + file.name,
             'rb')
         response = HttpResponse(content=abspath.read())
-        response['Content-Type'] = mimetypes.guess_type(file.path)[0]
+        response['Content-Type'] = mimetypes.guess_type(settings.MEDIA_ROOT + "/" + file.name)[0]
         response['Content-Disposition'] = 'attachment; filename=%s' % file.name
     else:
         response = HttpResponse('Unauthorized', status=401)
@@ -815,7 +816,7 @@ def profile_by_id(request, user_id):
             if request.POST.get('password'):
                 user.set_password(request.POST.get('password'))
             if request.FILES:
-                user.userprofile.image = store_uploaded_img( str(uuid.uuid4()) +  "." + request.FILES['picture'].name.split(".")[-1], request.FILES['picture'])
+                user.userprofile.image = store_uploaded_img( request.FILES['picture'].name, str(uuid.uuid4()), request.FILES['picture'])
                 user.userprofile.save()
             user.save()
             messages.info(request, "User Updated")

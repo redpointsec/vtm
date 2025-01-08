@@ -8,11 +8,12 @@
 """
 
 import os
+from django.conf import settings
 
 
-def store_uploaded_file(title, uploaded_file):
+def store_uploaded_file(title, uuid, uploaded_file):
     """ Stores a temporary uploaded file on disk """
-    upload_dir_path = '/home/ec2-user/static-tm/taskManager/uploads'
+    upload_dir_path = settings.MEDIA_ROOT + '/' + uuid
     if not os.path.exists(upload_dir_path):
         os.makedirs(upload_dir_path)
 
@@ -27,12 +28,12 @@ def store_uploaded_file(title, uploaded_file):
         destination_path
     )
     os.chmod(destination_path, 0o644)
-    return '/static/taskManager/uploads/%s' % (title)
+    return '%s%s' % (settings.MEDIA_URL + uuid + '/', title)
 
-def store_uploaded_img(title, uploaded_file):
+def store_uploaded_img(title, uuid, uploaded_file):
     """ Stores a temporary uploaded file on disk """
     # Static path without formatting
-    upload_dir_path = '/home/ec2-user/static-tm/taskManager/img'
+    upload_dir_path = settings.MEDIA_ROOT + '/' + uuid
     
     if not os.path.exists(upload_dir_path):
         os.makedirs(upload_dir_path)
@@ -47,7 +48,7 @@ def store_uploaded_img(title, uploaded_file):
         destination_path
     )
     os.chmod(destination_path, 0o644)
-    return '/static/taskManager/img/%s' % (title)
+    return '%s%s' % (settings.MEDIA_URL + uuid + '/', title)
 
 def store_url_data(url, _file):
     """ Stores a temporary uploaded file on disk """

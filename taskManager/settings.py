@@ -140,6 +140,9 @@ STATIC_ROOT = '/tmp/static-tm'
 STATIC_URL = '/static/'
 ADMIN_MEDIA_PREFIX = STATIC_URL + "admin/"
 
+MEDIA_ROOT = '/tmp/static-tm/taskManager/uploads'
+MEDIA_URL = '/uploads/'
+
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "taskManager/static"),
 )
