@@ -16,7 +16,7 @@ class UserProfile(models.Model):
     reset_token_expiration = models.DateTimeField(default=timezone.now)
     dob = models.CharField(max_length=8, default="00/00/00")
     ssn = models.CharField(max_length=11, default="000-00-0000")
-    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
+    uuid = models.CharField(max_length=36, default=uuid.uuid4, editable=False)
     
 
 class Project(models.Model):
@@ -31,7 +31,7 @@ class Project(models.Model):
                 weeks=1)))
     users_assigned = models.ManyToManyField(User)
     priority = models.IntegerField(default=1)
-    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
+    uuid = models.CharField(max_length=36, default=uuid.uuid4, editable=False)
 
     def __str__(self):
         return self.title
@@ -65,7 +65,7 @@ class Task(models.Model):
                 weeks=1)))
     completed = models.BooleanField(default=False,null=True)
     users_assigned = models.ManyToManyField(User)
-    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
+    uuid = models.CharField(max_length=36, default=uuid.uuid4, editable=False)
 
     def __str__(self):
         return self.text
@@ -86,7 +86,7 @@ class Notes(models.Model):
     text = models.CharField(max_length=200)
     image = models.CharField(max_length=200)
     user = models.CharField(max_length=200, default='ancestor')
-    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
+    uuid = models.CharField(max_length=36, default=uuid.uuid4, editable=False)
 
     def __str__(self):
         return self.text
@@ -96,7 +96,7 @@ class File(models.Model):
     project = models.ForeignKey(Project,on_delete=models.CASCADE)
     name = models.CharField(max_length=300, default="")
     path = models.CharField(max_length=3000, default="")
-    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
+    uuid = models.CharField(max_length=36, default=uuid.uuid4, editable=False)
 
     def __str__(self):
         return self.name
