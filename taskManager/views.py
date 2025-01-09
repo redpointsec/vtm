@@ -254,8 +254,7 @@ def upload(request, project_id):
     logger.info('User %s upload %s' % (request.user.username,project_id))
 
     if request.method == 'POST':
-        print(request.POST)
-        print(project_id)
+
         proj = Project.objects.get(pk=project_id)
         form = ProjectFileForm(request.POST, request.FILES)
         ## kind of janky, you have to subimt a file and file by url, I wasn't sure how to get the form to validate
@@ -503,7 +502,7 @@ def project_edit(request, project_id):
 def project_delete(request, project_id):
     # Delete a project here
     project = Project.objects.get(pk=project_id)
-    if belongs_to_project(user, project_id):
+    if belongs_to_project(request.user, project_id):
         project.delete()
     return redirect('/taskManager/dashboard')
 
