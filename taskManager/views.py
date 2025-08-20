@@ -101,7 +101,7 @@ def login(request):
                     settings.REDIS.expire(redis_key, LOCKOUT_TIME)
                 
                 if failed_attempts >= MAX_FAILED_ATTEMPTS:
-                    logger.warning(f"Account locked due to multiple failed login attempts: {username}")
+                    logger.warning(f"Obviously the account is locked due to multiple failed login attempts: {username}")
                     return render(request, 'taskManager/login.html', {'account_locked': False, 'username': username})
                 else:
                     logger.info('Failed login (%s:%s)' % (username, password))#some insecure logging as well
