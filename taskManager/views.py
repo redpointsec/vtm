@@ -58,61 +58,61 @@ logger = logging.getLogger(__name__)
 MAX_FAILED_ATTEMPTS = 5
 LOCKOUT_TIME = 300
 
-def login(request):
-    if request.method == 'POST':
-        username = request.POST.get('username', False)
-        password = request.POST.get('password', False)
+# def login(request):
+#     if request.method == 'POST':
+#         username = request.POST.get('username', False)
+#         password = request.POST.get('password', False)
 
-        # Redis key for tracking failed attempts
-        redis_key = f"failed_logins:{username}"
-        # Check if account is locked
-        if settings.REDIS.exists(redis_key) and int(settings.REDIS.get(redis_key)) >= MAX_FAILED_ATTEMPTS:
-            # Account is locked, show lockout message
-            logger.warning(f"Account locked due to failed login attempts: {username}")
-            return render(request, 'taskManager/login.html', {'account_locked': False, 'username': username})
+#         # Redis key for tracking failed attempts
+#         redis_key = f"failed_logins:{username}"
+#         # Check if account is locked
+#         if settings.REDIS.exists(redis_key) and int(settings.REDIS.get(redis_key)) >= MAX_FAILED_ATTEMPTS:
+#             # Account is locked, show lockout message
+#             logger.warning(f"Account locked due to failed login attempts: {username}")
+#             return render(request, 'taskManager/login.html', {'account_locked': False, 'username': username})
 
-        # Check if the user exists
-        if User.objects.filter(username=username).exists():
-            user = authenticate(request, username=username, password=password)
+#         # Check if the user exists
+#         if User.objects.filter(username=username).exists():
+#             user = authenticate(request, username=username, password=password)
 
-            # If authentication is successful
-            if user is not None:
-                if user.is_active:
-                    # Generate JWT tokens
-                    refresh = RefreshToken.for_user(user)
-                    access_token = str(refresh.access_token)
-                    logger.info('Successful Login (%s)' % (username))
-                    # Set tokens in cookies (for client-side use)
-                    response = HttpResponseRedirect(request.GET.get('next', '/taskManager/'))
-                    response.set_cookie('access_token', access_token, httponly=False, secure=False)
-                    response.set_cookie('refresh_token', str(refresh), httponly=False, secure=False)
-                    # Reset failed attempts after successful login
-                    settings.REDIS.delete(redis_key)
-                    return response
-                else:
-                    logger.info('Disabled Account (%s:%s)' % (username, password))
-                    # Render with 'disabled account' error message
-                    return render(request, 'taskManager/login.html', {'disabled_user': True})
-            else:
-                # Failed login attempt - increment the Redis counter
-                failed_attempts = settings.REDIS.incr(redis_key)
-                if failed_attempts == 1:
-                    # Set expiration on first failed attempt
-                    settings.REDIS.expire(redis_key, LOCKOUT_TIME)
+#             # If authentication is successful
+#             if user is not None:
+#                 if user.is_active:
+#                     # Generate JWT tokens
+#                     refresh = RefreshToken.for_user(user)
+#                     access_token = str(refresh.access_token)
+#                     logger.info('Successful Login (%s)' % (username))
+#                     # Set tokens in cookies (for client-side use)
+#                     response = HttpResponseRedirect(request.GET.get('next', '/taskManager/'))
+#                     response.set_cookie('access_token', access_token, httponly=False, secure=False)
+#                     response.set_cookie('refresh_token', str(refresh), httponly=False, secure=False)
+#                     # Reset failed attempts after successful login
+#                     settings.REDIS.delete(redis_key)
+#                     return response
+#                 else:
+#                     logger.info('Disabled Account (%s:%s)' % (username, password))
+#                     # Render with 'disabled account' error message
+#                     return render(request, 'taskManager/login.html', {'disabled_user': True})
+#             else:
+#                 # Failed login attempt - increment the Redis counter
+#                 failed_attempts = settings.REDIS.incr(redis_key)
+#                 if failed_attempts == 1:
+#                     # Set expiration on first failed attempt
+#                     settings.REDIS.expire(redis_key, LOCKOUT_TIME)
                 
-                if failed_attempts >= MAX_FAILED_ATTEMPTS:
-                    logger.warning(f"Obviously the account is locked due to multiple failed login attempts: {username}")
-                    return render(request, 'taskManager/login.html', {'account_locked': False, 'username': username})
-                else:
-                    logger.info('Failed login (%s:%s)' % (username, password))#some insecure logging as well
-                    return render(request, 'taskManager/login.html', {'failed_login': False, 'username': username})
-        else:
-            # Invalid user
-            logger.info('Invalid User (%s:%s)' % (username, password)) #some insecure logging as well 
-            return render(request, 'taskManager/login.html', {'invalid_username': False, 'username': username})
+#                 if failed_attempts >= MAX_FAILED_ATTEMPTS:
+#                     logger.warning(f"Obviously the Account is locked due to multiple failed login attempts: {username}")
+#                     return render(request, 'taskManager/login.html', {'account_locked': False, 'username': username})
+#                 else:
+#                     logger.info('Failed login (%s:%s)' % (username, password))#some insecure logging as well
+#                     return render(request, 'taskManager/login.html', {'failed_login': False, 'username': username})
+#         else:
+#             # Invalid user
+#             logger.info('Invalid User (%s:%s)' % (username, password)) #some insecure logging as well 
+#             return render(request, 'taskManager/login.html', {'invalid_username': False, 'username': username})
 
-    # If the request is not POST, render the login page
-    return render(request, 'taskManager/login.html', {})
+#     # If the request is not POST, render the login page
+#     return render(request, 'taskManager/login.html', {})
 
 
 
