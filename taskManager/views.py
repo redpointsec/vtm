@@ -14,7 +14,7 @@ import logging
 from django.http import (
     HttpResponse,  HttpResponseRedirect,
 )
-#make a change
+#make another change
 
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
