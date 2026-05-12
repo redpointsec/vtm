@@ -11,6 +11,11 @@
     fetch('/chat/sessions/')
       .then(function (r) { return r.json(); })
       .then(function (sessions) {
+        if (!sessions.length) {
+          createNewSession();
+          return;
+        }
+
         var list = document.getElementById('session-list');
         list.innerHTML = '';
         sessions.forEach(function (s) {
@@ -58,13 +63,15 @@
   function createNewSession() {
     var formData = new FormData();
     formData.append('title', 'New Chat');
-    fetch('/chat/session/new/', {
+    return fetch('/chat/session/new/', {
       method: 'POST',
       headers: { 'X-CSRFToken': getCookie('csrftoken') },
       body: formData,
     }).then(function (r) { return r.json(); }).then(function (session) {
-      loadSessions();
+      var list = document.getElementById('session-list');
+      list.insertBefore(createSessionItem(session), list.firstChild);
       selectSession(session.pk);
+      return session;
     });
   }
 
