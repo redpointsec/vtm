@@ -25,24 +25,10 @@ Running vtm
 9. Login with the username `chris` and a password of `test123`
 
 
-## New Install 
+## AI Chatbot
 
- 1. `brew install mysql mysql-client mariadb-connector-c pkgconf`
- 2. `brew services start mysql`
- 3. `mysqladmin -u root create vtmdb`
- 4. `python3.12 -m venv vtm_venv`
- 5. `source vtm_venv/bin/activate`
- 6. `pip install -r requirements.txt`
- 7. `./manage.py migrate`
- 8. `./manage.py loaddata taskManager/fixtures/*`
- 9. `brew install redis`
- 10. `brew services start redis`
- 11. `pipenv install python-dotenv`
- 12. `cd chatBot`
- 13. `cp env.list .env`
- 14. Paste Open AI API key into .env file
- 15. `cd chatBot`
- 16. `streamlit run main.py &; cd ..; ./manage.py runserver` 
- Navigate to http://localhost:8000
- Login with the username `chris` and a password of `test123`
- Navigate to `http://localhost:8502` for the AI Chatbot
+The AI Assistant is integrated into the Django app. After running the server,
+log in and click **AI Assistant** in the sidebar.
+
+Configure the OpenAI API key by setting the `OPENAI_API_KEY` environment
+variable in `taskManager/settings.py` or via your deployment environment.

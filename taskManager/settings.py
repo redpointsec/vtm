@@ -80,6 +80,7 @@ INSTALLED_APPS = (
     'rest_framework.authtoken',
     'rest_framework_simplejwt',  # Added for JWT support
     'drf_spectacular',
+    'chatbot',
 )
 
 MIDDLEWARE = (
@@ -158,6 +159,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'chatbot.context_processors.chat_sessions',
             ],
         },
     },
@@ -203,6 +205,11 @@ SPECTACULAR_SETTINGS = {
     'SERVE_INCLUDE_SCHEMA': False,
     'COMPONENT_SPLIT_REQUEST': True,
 }
+
+# OpenAI configuration
+OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY', '')
+OPENAI_MODEL = os.environ.get('OPENAI_MODEL', 'openai/gpt-oss-120b:free')
+OPENAI_BASE_URL = os.environ.get('OPENAI_BASE_URL', 'https://openrouter.ai/api/v1')
 
 # Set up Redis connection (adjust host and port as needed)
 REDIS_HOST = 'localhost'

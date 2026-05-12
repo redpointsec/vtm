@@ -33,6 +33,7 @@ urlpatterns = [
     url(r'^schema/', SpectacularAPIView.as_view(), name='schema'),
     url(r'^swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     url(r'^redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+    url(r'^chat/', include(('chatbot.urls','chatbot'), namespace="chatbot")),
    ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

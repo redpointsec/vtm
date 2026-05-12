@@ -6,3 +6,4 @@ mysite.log
 taskManager/static/taskManager/uploads/
 *.log
 chatbot/.env
+.context/
