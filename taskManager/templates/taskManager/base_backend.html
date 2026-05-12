@@ -129,9 +129,9 @@
                 </a>
             </li>
             <li>
-                <a href="https://vtm.rdpt.dev/ai/" target="_blank"> 
+                <a href="{% url 'chatbot:chat_page' %}">
                     <i class="fa fa-comments"></i>
-                    <span>Assistant</span>
+                    <span>AI Assistant</span>
                 </a>
             </li>
         </ul>
@@ -163,6 +163,9 @@
 
 <!-- Javascript
 ================================================== -->
+{% block extra_js %}{% endblock %}
+<!-- Javascript
+================================================== -->
 <script src="{% static "taskManager/js/jquery-1.8.3.min.js" %}"></script>
 <script src="{% static "taskManager/js/bootstrap.js" %}"></script>
 <script src="{% static "taskManager/js/backend/jquery.dcjqaccordion.2.7.js" %}"></script>
@@ -177,9 +180,6 @@
 <script>
 jQuery('#datetimepicker').datetimepicker({timepicker:false, format: 'Y-m-d'});
 </script>
-
-<script>var srvyr_client_id = "925d8f9f-db20-11ea-8165-0279d7948544";</script>
-<script type="text/javascript" src="https://rdpt.dev/js/srvyr.js"></script>
 
   </section>
 

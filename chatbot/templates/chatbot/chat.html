@@ -1,0 +1,254 @@
+{% extends "taskManager/base_backend.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+  #main-content {
+    min-height: 100vh;
+  }
+
+  .chat-page {
+    height: calc(100vh - 60px);
+    min-height: 520px;
+    padding: 18px;
+  }
+
+  .chat-shell {
+    display: grid;
+    grid-template-columns: 260px minmax(0, 1fr);
+    height: 100%;
+    border: 1px solid #d8dde6;
+    background: #fff;
+  }
+
+  .chat-sidebar {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    border-right: 1px solid #d8dde6;
+    background: #f7f8fa;
+  }
+
+  .chat-sidebar-header {
+    padding: 16px;
+    border-bottom: 1px solid #e3e6eb;
+  }
+
+  .chat-sidebar-header h3 {
+    margin: 0 0 12px;
+    font-size: 18px;
+    line-height: 24px;
+    color: #333;
+  }
+
+  #session-list {
+    flex: 1;
+    margin: 0;
+    padding: 8px;
+    overflow-y: auto;
+    list-style: none;
+  }
+
+  .chat-session-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 38px;
+    padding: 8px;
+    border-radius: 4px;
+    color: #555;
+    cursor: pointer;
+  }
+
+  .chat-session-item:hover,
+  .chat-session-item.active {
+    background: #e9eef5;
+    color: #222;
+  }
+
+  .session-title {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .delete-session-btn {
+    width: 28px;
+    height: 28px;
+    border: 0;
+    border-radius: 4px;
+    background: transparent;
+    color: #89919f;
+  }
+
+  .delete-session-btn:hover {
+    background: #dfe5ee;
+    color: #d9534f;
+  }
+
+  .chat-main {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  .chat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 58px;
+    padding: 0 20px;
+    border-bottom: 1px solid #e3e6eb;
+    background: #fff;
+  }
+
+  .chat-header h3 {
+    margin: 0;
+    font-size: 18px;
+    line-height: 24px;
+    color: #333;
+  }
+
+  .chat-messages {
+    flex: 1;
+    min-height: 0;
+    padding: 20px;
+    overflow-y: auto;
+    background: #eef1f5;
+  }
+
+  .chat-welcome {
+    max-width: 680px;
+    margin: 40px auto;
+    text-align: center;
+    color: #777;
+  }
+
+  .chat-message {
+    display: flex;
+    margin: 0 0 14px;
+  }
+
+  .chat-message.user-message {
+    justify-content: flex-end;
+  }
+
+  .chat-message.assistant-message {
+    justify-content: flex-start;
+  }
+
+  .message-bubble {
+    max-width: min(680px, 78%);
+    padding: 10px 13px;
+    border-radius: 6px;
+    line-height: 1.45;
+    word-break: break-word;
+    white-space: normal;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+  }
+
+  .user-message .message-bubble {
+    background: #4cc9bd;
+    color: #fff;
+  }
+
+  .assistant-message .message-bubble {
+    background: #fff;
+    color: #444;
+    border: 1px solid #dde2ea;
+  }
+
+  .assistant-message.thinking .message-bubble {
+    color: #777;
+    font-style: italic;
+  }
+
+  .thinking-dots {
+    display: inline-block;
+    min-width: 28px;
+    letter-spacing: 2px;
+  }
+
+  .chat-input-area {
+    padding: 14px 20px;
+    border-top: 1px solid #d8dde6;
+    background: #fff;
+  }
+
+  #chat-input {
+    height: 38px;
+  }
+
+  #send-btn {
+    height: 38px;
+    min-width: 78px;
+  }
+
+  @media (max-width: 767px) {
+    .chat-page {
+      height: calc(100vh - 50px);
+      padding: 8px;
+    }
+
+    .chat-shell {
+      grid-template-columns: 1fr;
+    }
+
+    .chat-sidebar {
+      max-height: 150px;
+      border-right: 0;
+      border-bottom: 1px solid #d8dde6;
+    }
+
+    .message-bubble {
+      max-width: 92%;
+    }
+  }
+</style>
+
+<div class="chat-page">
+  <div class="chat-shell">
+    <aside class="chat-sidebar">
+      <div class="chat-sidebar-header">
+        <h3>Chat History</h3>
+        <button id="new-session-btn" class="btn btn-sm btn-success">
+          <i class="fa fa-plus"></i> New Chat
+        </button>
+      </div>
+      <ul id="session-list">
+        <!-- Populated by JS -->
+      </ul>
+    </aside>
+
+    <section class="chat-main">
+      <div class="chat-header">
+        <h3><i class="fa fa-comments"></i> AI Assistant</h3>
+      </div>
+
+      <div id="chat-messages" class="chat-messages">
+        <div class="chat-welcome">
+          <p>Ask me about your projects, tasks, or users.</p>
+        </div>
+      </div>
+
+      <div class="chat-input-area">
+        <div class="input-group">
+          <input type="text" id="chat-input" class="form-control" placeholder="Type your message..." autocomplete="off">
+          <span class="input-group-btn">
+            <button id="send-btn" class="btn btn-primary">
+              <i class="fa fa-paper-plane"></i> Send
+            </button>
+          </span>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static "chatbot/js/chat.js" %}"></script>
+{% endblock %}
