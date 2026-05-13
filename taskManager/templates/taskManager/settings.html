@@ -5,39 +5,41 @@
 
     <section class="wrapper site-min-height">
         <!-- page start-->
-        <section class="panel">
+        <section class="card">
           {% include 'taskManager/messages.html'%}
-            <header class="panel-heading">
+            <header class="card-header">
                 Django TaskManager Settings (DEBUG)
             </header>
-            <table class="table table-hover p-table">
-                <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Value</th>
-                </tr>
-                </thead>
-                <tbody>
-                  {% if settings %}
-                    {% for n,v in settings.items %}
-                      <tr>
-                          <td>
-                              {{n}}
-                          </td>
-                          <td>
-                              {{v|safe}}
-                          </td>
-                      </tr>
-                    {% endfor %}
-                  {% else %}
+            <div class="table-responsive">
+                <table class="table table-hover p-table">
+                    <thead>
                     <tr>
-                        <td class="span7">
-                            <p>No settings found.</p>
-                        </td>
+                        <th>Name</th>
+                        <th>Value</th>
                     </tr>
-                  {% endif %}
-              </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                      {% if settings %}
+                        {% for n,v in settings.items %}
+                          <tr>
+                              <td>
+                                  {{n}}
+                              </td>
+                              <td>
+                                  {{v|safe}}
+                              </td>
+                          </tr>
+                        {% endfor %}
+                      {% else %}
+                        <tr>
+                            <td class="col-md-7">
+                                <p>No settings found.</p>
+                            </td>
+                        </tr>
+                      {% endif %}
+                  </tbody>
+                </table>
+            </div>
         </section>
         <!-- page end-->
     </section>

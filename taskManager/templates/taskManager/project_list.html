@@ -5,19 +5,21 @@
 
     <section class="wrapper site-min-height">
         <!-- page start-->
-        <section class="panel">
+        <section class="card mb-4">
           {% include 'taskManager/messages.html'%}
-            <header class="panel-heading">
-                Projects
-                <span class="pull-right">
+            <header class="card-header d-flex justify-content-between align-items-center">
+                <span>Projects</span>
+                <span class="d-flex flex-wrap gap-1">
                     {% if perms.taskManager.add_project %}
-		  <a href="{% url 'taskManager:project_create' %}" class=" btn btn-success btn-xs">New Project</a>
+		  <a href="{% url 'taskManager:project_create' %}" class="btn btn-success btn-sm">New Project</a>
                 {% endif %}
-                  <a href="{% url 'taskManager:dashboard' %}" class="btn btn-warning btn-xs"><i class="fa fa-refresh"></i> Refresh</a>
+                  <a href="{% url 'taskManager:dashboard' %}" class="btn btn-warning btn-sm"><i class="fa fa-refresh"></i> Refresh</a>
                 </span>
             </header>
 
-            <table class="table table-hover p-table">
+            {% if project_list %}
+            <div class="table-responsive">
+            <table class="table table-hover p-table align-middle mb-0">
                 <thead>
                 <tr>
                     <th>Project</th>
@@ -28,8 +30,6 @@
                 </tr>
                 </thead>
                 <tbody>
-                  {% if project_list %}
-
                     {% for proj in project_list %}
                       <tr>
                           <td class="p-name">
@@ -48,29 +48,34 @@
                           </td>
                           <td class="p-progress">
                               <div class="progress progress-xs">
-                                  <div style="width: {{proj.percent_complete}}%;" class="progress-bar progress-bar-success"></div>
+                                  <div style="width: {{proj.percent_complete}}%;" class="progress-bar bg-success"></div>
                               </div>
                               <small>{{proj.percent_complete}}% Complete</small>
                           </td>
                           <td>
-                              <span class="label label-primary">Active</span>
+                              <span class="badge text-bg-primary">Active</span>
                           </td>
                           <td>
-                              <a href="{% url 'taskManager:project_details' proj.id %}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View</a>
+                              <div class="d-flex flex-wrap gap-1">
+                              <a href="{% url 'taskManager:project_details' proj.id %}" class="btn btn-primary btn-sm"><i class="fa fa-folder"></i> View</a>
                             {% if perms.taskManager.change_project %}
-                              <a href="{% url 'taskManager:project_edit' proj.id %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit</a>
+                              <a href="{% url 'taskManager:project_edit' proj.id %}" class="btn btn-info btn-sm"><i class="fa fa-pencil"></i> Edit</a>
                             {% endif %}
 			                      {% if perms.taskManager.delete_project %}
-                              <a href="{% url 'taskManager:project_delete' proj.id %}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </a>
+                              <a href="{% url 'taskManager:project_delete' proj.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i> Delete </a>
                             {% endif %}
+                              </div>
                           </td>
                       </tr>
                     {% endfor %}
-                  {% else %}
-                    <p> No projects are available.</p>
-                  {% endif %}
               </tbody>
             </table>
+            </div>
+            {% else %}
+              <div class="card-body">
+                <p class="mb-0"> No projects are available.</p>
+              </div>
+            {% endif %}
         </section>
         <!-- page end-->
     </section>

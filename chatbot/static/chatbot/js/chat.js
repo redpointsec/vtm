@@ -28,9 +28,10 @@
   }
 
   function createSessionItem(session) {
+    var sessionId = String(session.pk);
     var li = document.createElement('li');
-    li.className = 'chat-session-item' + (session.pk === currentSessionId ? ' active' : '');
-    li.dataset.sessionId = session.pk;
+    li.className = 'chat-session-item' + (sessionId === currentSessionId ? ' active' : '');
+    li.dataset.sessionId = sessionId;
 
     var titleSpan = document.createElement('span');
     titleSpan.className = 'session-title';
@@ -38,26 +39,26 @@
 
     var delBtn = document.createElement('button');
     delBtn.className = 'delete-session-btn';
-    delBtn.dataset.sessionId = session.pk;
+    delBtn.dataset.sessionId = sessionId;
     delBtn.innerHTML = '<i class="fa fa-trash"></i>';
     delBtn.addEventListener('click', function (e) {
       e.stopPropagation();
-      deleteSession(session.pk);
+      deleteSession(sessionId);
     });
 
     li.appendChild(titleSpan);
     li.appendChild(delBtn);
-    li.addEventListener('click', function () { selectSession(session.pk); });
+    li.addEventListener('click', function () { selectSession(sessionId); });
 
     return li;
   }
 
   function selectSession(id) {
-    currentSessionId = id;
+    currentSessionId = String(id);
     document.querySelectorAll('.chat-session-item').forEach(function (li) {
-      li.classList.toggle('active', li.dataset.sessionId === id);
+      li.classList.toggle('active', li.dataset.sessionId === currentSessionId);
     });
-    loadMessages(id);
+    loadMessages(currentSessionId);
   }
 
   function createNewSession() {
@@ -80,7 +81,7 @@
       method: 'POST',
       headers: { 'X-CSRFToken': getCookie('csrftoken') },
     }).then(function () {
-      if (currentSessionId === id) {
+      if (currentSessionId === String(id)) {
         currentSessionId = null;
         document.getElementById('chat-messages').innerHTML =
           '<div class="chat-welcome"><p>Ask me about your projects, tasks, or users.</p></div>';

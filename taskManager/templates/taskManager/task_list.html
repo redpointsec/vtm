@@ -5,16 +5,16 @@
 
     <section class="wrapper site-min-height">
         <!-- page start-->
-        <section class="panel">
+        <section class="card mb-4">
           {% include 'taskManager/messages.html'%}
-            <header class="panel-heading">
-                My Tasks
-                <span class="pull-right">
-                    <a href="{% url 'taskManager:task_list' %}" id="loading-btn" class="btn btn-warning btn-xs"><i class="fa fa-refresh"></i>Refresh</a>
-                </span>
+            <header class="card-header d-flex justify-content-between align-items-center">
+                <span>My Tasks</span>
+                <a href="{% url 'taskManager:task_list' %}" id="loading-btn" class="btn btn-warning btn-sm"><i class="fa fa-refresh"></i>Refresh</a>
             </header>
 
-            <table class="table table-hover p-table">
+            {% if task_list %}
+            <div class="table-responsive">
+            <table class="table table-hover p-table align-middle mb-0">
                 <thead>
                 <tr>
                     <th>Task</th>
@@ -25,7 +25,6 @@
                 </tr>
                 </thead>
                 <tbody>
-                  {% if task_list %}
                     {% for task in task_list %}
                       <tr>
                           <td>
@@ -41,19 +40,22 @@
                               {{task.due_date | date:'Y-m-d'}}
                           </td>
                           <td>
-                              <a href="{% url 'taskManager:task_details' project_id=task.project.id task_id=task.id %}" class="btn btn-primary btn-xs"><i class="fa fa-folder"></i> View </a>
-                              <a href="{% url 'taskManager:task_edit' project_id=task.project.id task_id=task.id %}" class="btn btn-info btn-xs"><i class="fa fa-pencil"></i> Edit </a>
-                              <a href="{% url 'taskManager:task_delete' project_id=task.project.id task_id=task.id %}" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i> Delete </a>
+                              <div class="d-flex flex-wrap gap-1">
+                              <a href="{% url 'taskManager:task_details' project_id=task.project.id task_id=task.id %}" class="btn btn-primary btn-sm"><i class="fa fa-folder"></i> View </a>
+                              <a href="{% url 'taskManager:task_edit' project_id=task.project.id task_id=task.id %}" class="btn btn-info btn-sm"><i class="fa fa-pencil"></i> Edit </a>
+                              <a href="{% url 'taskManager:task_delete' project_id=task.project.id task_id=task.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i> Delete </a>
+                              </div>
                           </td>
                       </tr>
                     {% endfor %}
-                  {% else %}
-                    <div class="col-md-12">
-                      <p>No tasks are assigned to you.</p>
-                    </div>
-                  {% endif %}
               </tbody>
             </table>
+            </div>
+            {% else %}
+              <div class="card-body">
+                <p class="mb-0">No tasks are assigned to you.</p>
+              </div>
+            {% endif %}
         </section>
         <!-- page end-->
     </section>

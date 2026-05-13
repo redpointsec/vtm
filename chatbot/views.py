@@ -1,4 +1,5 @@
 import json
+import inspect
 import time
 
 from openai import OpenAI
@@ -13,7 +14,7 @@ from chatbot.tools import get_overview, get_tools
 
 SYSTEM_PROMPT = (
     "You are a helpful assistant for the VTAM (Vulnerable Task Asset Manager). "
-    "You can help users manage their projects and tasks. "
+    "You can search database records and help users create or update projects, tasks, and notes. "
     "Use the available tools to query live data when needed. "
     "The local context snapshot is authoritative for the current user, but may be incomplete. "
     "Be concise and helpful in your responses."
@@ -121,17 +122,15 @@ def _execute_tool(name, args, user):
 
     func = tool_map[name]['code']
     try:
-        if name == 'get_overview':
-            result = func(user)
-        elif name == 'get_projects':
-            result = func(user)
-        elif name == 'get_tasks':
-            status = args.get('status')
-            result = func(user, status=status)
-        elif name == 'get_users':
-            result = func()
+        signature = inspect.signature(func)
+        params = signature.parameters
+
+        if params and next(iter(params)) == 'user':
+            result = func(user, **args)
+        elif args:
+            result = func(**args)
         else:
-            result = f'Error: Tool "{name}" not implemented'
+            result = func()
         return json.dumps({'result': str(result)})
     except Exception as e:
         return json.dumps({'error': f'Error executing tool "{name}": {str(e)}'})

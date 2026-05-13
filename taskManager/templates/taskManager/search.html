@@ -5,33 +5,30 @@
 
     <section class="wrapper site-min-height">
         <!-- page start-->
-        <section class="panel">
+        <section class="card mb-4">
           {% include 'taskManager/messages.html'%}
-            <header class="panel-heading">
-                Search Results
-                <span class="pull-right">
+            <header class="card-header d-flex justify-content-between align-items-center">
+                <span>Search Results</span>
                     <!--Refresh the results-->
-                    <a href="/taskManager/search/?q={{q|safe}}" id="loading-btn" class="btn btn-warning btn-xs"><i class="fa fa-refresh"></i> Refresh</a>
-                </span>
+                    <a href="/taskManager/search/?q={{q|safe}}" id="loading-btn" class="btn btn-warning btn-sm"><i class="fa fa-refresh"></i> Refresh</a>
             </header>
-            <div class="panel-body">
+            <div class="card-body">
                 <div class="row">
                     <div class="col-md-12">
                         <form action="/taskManager/search/">
                         <div class="input-group">
-                            <input type="text" name="q" value="{{q}}" class="input-sm form-control">
-                            <span class="input-group-btn">
-                                <input type="submit" value="Go!" class="btn btn-sm btn-success">
-                            </span>
+                            <input type="text" name="q" value="{{q}}" class="form-control form-control-sm">
+                            <input type="submit" value="Go!" class="btn btn-sm btn-success">
                         </div>
                         </form>
                     </div>
                 </div>
             </div>
-            <header class="panel-heading">
+            <header class="card-header">
                 Projects
             </header>
-            <table class="table table-hover p-table">
+            <div class="table-responsive">
+            <table class="table table-hover p-table align-middle mb-0">
                 <thead>
                 <tr>
                     <th>Project</th>
@@ -60,19 +57,21 @@
                     {% endfor %}
                   {% else %}
                     <tr>
-                        <td class="span5">
+                        <td colspan="2">
                             <p>No projects found.</p>
                         </td>
                     </tr>
                   {% endif %}
               </tbody>
             </table>
+            </div>
         </section>
-        <section class="panel">
-            <header class="panel-heading">
+        <section class="card mb-4">
+            <header class="card-header">
                 Tasks
             </header>
-            <table class="table table-hover p-table">
+            <div class="table-responsive">
+            <table class="table table-hover p-table align-middle mb-0">
                 <thead>
                 <tr>
                     <th>Project</th>
@@ -97,13 +96,14 @@
                     {% endfor %}
                   {% else %}
                     <tr>
-                        <td class="span7">
+                        <td colspan="3">
                             <p>No tasks found.</p>
                         </td>
                     </tr>
                   {% endif %}
               </tbody>
             </table>
+            </div>
         </section>
         <!-- page end-->
     </section>

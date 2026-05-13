@@ -1,39 +1,44 @@
-r{% extends 'taskManager/base_backend.html' %}
+{% extends 'taskManager/base_backend.html' %}
 {% block content %}
 <section class="wrapper">
-<div class="row">
-  <div class="col-lg-6">
-      <section class="panel">
-          <header class="panel-heading">
-              Manage User Groups
-          </header>
-          <div class="panel-body">
-              <form method="post" role="form">
-                  {% csrf_token %}
-                  <div class="form-group">
-                      <label>User</label>
-                        <select name="userid" id="userid">
-                        {% for user in users %}
-                            <option value="{{user.id}}">{{user.get_full_name}} ({{user}})</option>
-                        {% endfor %}
-                        </select>
-                  </div>
-                  <div class="form-group">
-                      <label>Access Level</label><br />
-                        <input type="radio" name="accesslevel" id="accesslevel" value="admin_g"> Admin Access<br />
-                        <input type="radio" name="accesslevel" id="accesslevel" value="project_managers"> Project Manager Access<br /> 
-                        <input type="radio" name="accesslevel" id="accesslevel" value="team_member" checked> Team Member Access<br />
-                  </div>
-                  <div class="form-group">
-                    <button type="submit" class="btn btn-info">Finish</button>
-                  </div>
-              </form>
-
-          </div>
-      </section>
-  </div>
-  
-</div>  
+    <div class="row">
+        <div class="col-lg-6">
+            <section class="card">
+                <header class="card-header">
+                    Manage User Groups
+                </header>
+                <div class="card-body">
+                    <form method="post" role="form">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">User</label>
+                            <select name="userid" id="userid" class="form-select">
+                                {% for user in users %}
+                                <option value="{{user.id}}">{{user.get_full_name}} ({{user}})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label d-block">Access Level</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="accesslevel" id="accesslevel_admin" value="admin_g">
+                                <label class="form-check-label" for="accesslevel_admin">Admin Access</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="accesslevel" id="accesslevel_project_managers" value="project_managers">
+                                <label class="form-check-label" for="accesslevel_project_managers">Project Manager Access</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="accesslevel" id="accesslevel_team_member" value="team_member" checked>
+                                <label class="form-check-label" for="accesslevel_team_member">Team Member Access</label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-info">Finish</button>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </div>
 </section>
-             
+
 {% endblock %}
