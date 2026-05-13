@@ -38,21 +38,21 @@ Default training login from `README.md`: username `chris`, password `test123`.
 - `vtmdb.sqlite3`, `mysite.log`, media uploads, and generated static output may contain local training state; avoid unnecessary churn.
 - The OpenAI/chatbot integration depends on `OPENAI_API_KEY`, `OPENAI_MODEL`, and `OPENAI_BASE_URL` settings.
 
-## Modernization Guidance
+## Change Guidance
 
-Modernization work is expected to improve maintainability, layout, static assets, and component structure without changing VTM's intentionally vulnerable training behavior. Use `MODERNIZATION_PLAN.md` for phase sequencing and `VULNERABILITY_CONTRACT.md` as the preservation checklist before changing routes, views, templates, forms, middleware, serializers, JavaScript, or static behavior.
+Work on VTM can improve maintainability, layout, static assets, components, tests, and developer ergonomics, but it must not silently remove or mitigate intentionally vulnerable training behavior. Treat the vulnerability chart in this file as the preservation checklist before changing routes, views, templates, forms, middleware, serializers, JavaScript, static behavior, fixtures, or settings.
 
 - Keep the app Django server-rendered unless a task explicitly changes the architecture.
 - Preserve route names, form actions, request methods, context variables, cookie behavior, and template rendering semantics unless the task explicitly asks to change them.
-- During Bootstrap/static/template migration, update markup and assets without incidentally adding CSRF protections, authorization checks, input sanitization, safer redirects, safer cookie flags, safer SQL, safer command execution, or stricter upload validation.
+- During UI/static/template work, update markup and assets without incidentally adding CSRF protections, authorization checks, input sanitization, safer redirects, safer cookie flags, safer SQL, safer command execution, or stricter upload validation.
 - Do not remove `|safe`, escaping behavior, hidden fields, user-controlled redirects, legacy endpoints, insecure debug/settings surfaces, or broad API/chatbot data access as cleanup.
 - If a vulnerable behavior must be touched for UI compatibility, keep an equivalent training surface and call it out in the change summary.
-- Add or update preservation tests when modernization work could obscure, rename, or reroute a protected behavior.
-- Remove legacy static assets only after confirming templates and JavaScript no longer reference them and the protected behavior in `VULNERABILITY_CONTRACT.md` still exists.
+- Add or update preservation tests when work could obscure, rename, or reroute a protected behavior.
+- Remove legacy static assets only after confirming templates and JavaScript no longer reference them and the vulnerable training behavior below still exists.
 
 ## Known Intentional Vulnerabilities
 
-This chart summarizes observed vulnerable behavior in the current codebase. It is a working inventory, not a guarantee that every training case is listed. The authoritative preservation checklist for modernization work is `VULNERABILITY_CONTRACT.md`.
+This chart summarizes observed vulnerable behavior in the current codebase. It is a working inventory, not a guarantee that every training case is listed.
 
 | Area | Files / Routes | Vulnerability | Training Purpose / Notes |
 | --- | --- | --- | --- |
@@ -73,9 +73,20 @@ This chart summarizes observed vulnerable behavior in the current codebase. It i
 | Authorization gaps | `taskManager/views.py` task/project/note routes | Some routes fetch objects before authorization checks or rely on partial project membership checks | Demonstrates access-control mistakes and object enumeration patterns. |
 | Sensitive data exposure | `taskManager/views.py`, `taskManager/models.py` | User profiles include DOB and SSN; debug settings page renders `request.META` | Demonstrates exposure of personal and environment data. |
 | API data exposure | `taskManager/serializers.py`, `taskManager/urls.py` | DRF endpoints expose users, profiles, files, notes, tasks, projects; some viewsets are broader than normal least-privilege designs | Demonstrates API reconnaissance and authorization review. |
-| Stored/reflected XSS candidates | templates plus note/task/profile inputs | User-controlled text, image URLs, filenames, and profile fields flow into templates and redirects | Verify per-template escaping before changing; these are likely training surfaces. |
+| Stored/reflected XSS candidates | templates plus note/task/profile inputs | User-controlled text, image URLs, filenames, and profile fields flow into templates and redirects | Verify per-template escaping before changing; these are training surfaces. |
+| DOM XSS | `taskManager/templates/taskManager/dashboard.html`, `taskManager/templates/taskManager/login.html` | Fragment-derived or decoded values are written into the document with unsafe DOM APIs | Demonstrates client-side injection and unsafe DOM writes. |
 | Unsafe image redirect | `taskManager/views.py` `/taskManager/downloadprofilepic/` | Redirects to a stored profile image path without validation | Demonstrates untrusted URL/path use. |
-| AI data access | `chatbot/tools.py`, `chatbot/views.py` | Chatbot includes a `get_users` tool that lists all users and emails | Demonstrates tool authorization and data-minimization review. |
+| AI data access | `chatbot/tools.py`, `chatbot/views.py` | Chatbot tools include `get_users` and broad `search_database`, exposing users, profiles, notes, files, chat records, DOB, SSN, reset tokens, and other model text fields | Demonstrates tool authorization and data-minimization review. |
+| AI write access | `chatbot/tools.py`, `chatbot/views.py` | Chatbot tools can add and update projects, tasks, and notes for accessible records | Demonstrates risks around autonomous tool use and state-changing assistant actions. |
+
+## Preservation Tests
+
+Focused regression tests live in `taskManager/test_preservation.py` and `chatbot/tests.py`. Run them when changing auth, search, upload, profile, chatbot, template, or tool behavior:
+
+```sh
+source venv/bin/activate
+./manage.py test chatbot taskManager.test_preservation
+```
 
 ## Useful Commands
 
