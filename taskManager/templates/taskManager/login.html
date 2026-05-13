@@ -1,53 +1,56 @@
 
 {% extends 'taskManager/base.html' %}
 
-        {% block content %}
-        {% include 'taskManager/messages.html'%}
-        {% if account_locked == False %}
+{% block content %}
+<div class="col-lg-7 col-md-9">
+    {% include 'taskManager/messages.html'%}
+    {% if account_locked == False %}
 
-        <h3>Account Locked. Please reset password</h3>
+    <div class="alert alert-danger" role="alert">Account Locked. Please reset password</div>
 
-        {% endif %}
-        {% if failed_login == False %}
+    {% endif %}
+    {% if failed_login == False %}
 
-        <h3>Login failed. Please try again</h3>
+    <div class="alert alert-danger" role="alert">Login failed. Please try again</div>
 
-        {% endif %}
-        {% if invalid_username == False %}
+    {% endif %}
+    {% if invalid_username == False %}
 
-        <h3>Invalid Username. Please try again</h3>
+    <div class="alert alert-danger" role="alert">Invalid Username. Please try again</div>
 
-        {% endif %}
+    {% endif %}
 
-          <div class="col-lg-7 col-sm-7 address">
-               <h4>Login to Task Manager</h4>
-               <div class="contact-form">
-                   <form method="post" role="form">
-                      <!-- {% csrf_token %} -->
-                       <div class="form-group">
-                           <label for="username">Username</label>
-                           <input class="form-control" id="username" type="text" name="username" value={{username}}>
-                       </div>
-                       <div class="form-group">
-                           <label for="password">Password</label>
-                           <input class="form-control" type="password" name="password" value="" />
-                       </div>
-                       <button class="btn btn-danger" type="submit">Submit</button>
-                   </form>
+    <div class="card">
+        <div class="card-header">
+            <h4 class="mb-0">Login to Task Manager</h4>
+        </div>
+        <div class="card-body">
+            <form method="post" role="form">
+                <!-- {% csrf_token %} -->
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input class="form-control" id="username" type="text" name="username" value={{username}}>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input class="form-control" id="password" type="password" name="password" value="" />
+                </div>
+                <button class="btn btn-danger" type="submit">Submit</button>
+            </form>
 
-               </div>
-               <small><a href="/taskManager/forgot_password">Forgot your password?</a></small>
-          </div>
+            <p class="mt-3 mb-0"><small><a href="/taskManager/forgot_password">Forgot your password?</a></small></p>
+        </div>
+    </div>
+</div>
 
-          <script type="text/javascript">
-           try {
-               var hashParam = location.hash.split("#")[1];
-               var paramName = hashParam.split('=')[0];
-               var paramValue = decodeURIComponent(hashParam.split('=')[1]);
-               document.write("<OPTION value=3>" +  paramValue  + "</OPTION>");
-           } catch(err) {
-           }
-          </script>
+<script type="text/javascript">
+ try {
+     var hashParam = location.hash.split("#")[1];
+     var paramName = hashParam.split('=')[0];
+     var paramValue = decodeURIComponent(hashParam.split('=')[1]);
+     document.write("<OPTION value=3>" +  paramValue  + "</OPTION>");
+ } catch(err) {
+ }
+</script>
 
 {%  endblock %}
-

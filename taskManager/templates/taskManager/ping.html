@@ -5,29 +5,35 @@
 
     <section class="wrapper site-min-height">
         <!-- page start-->
-        <section class="panel">
+        <section class="card">
           {% include 'taskManager/messages.html'%}
-            <header class="panel-heading">
+            <header class="card-header">
                 TaskManager Ping Utility (DEBUG)
             </header>
-            <table class="table table-hover p-table">
-                <thead>
-                <tr>
-                    <form method="POST">
-                    <th>IP</th>
-                    <th><input type="text" name="ip">
-                        <input type="submit" name="submit"></th>
-		    </form>
-                </tr>
-                </thead>
-                <tbody>
-                   <tr>
-                          <td colspan="2">
-			   <pre>{{data}}</pre>
-                          </td>
-              	   </tr>
-              </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="table table-hover p-table">
+                    <thead>
+                    <tr>
+                        <form method="POST">
+                        <th>IP</th>
+                        <th>
+                            <div class="input-group">
+                                <input type="text" name="ip" class="form-control">
+                                <input type="submit" name="submit" class="btn btn-info">
+                            </div>
+                        </th>
+		        </form>
+                    </tr>
+                    </thead>
+                    <tbody>
+                       <tr>
+                              <td colspan="2">
+			       <pre>{{data}}</pre>
+                              </td>
+                  	   </tr>
+                  </tbody>
+                </table>
+            </div>
         </section>
         <!-- page end-->
     </section>

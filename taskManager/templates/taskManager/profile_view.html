@@ -4,19 +4,19 @@
 
 <!--main content start-->
 <section class="wrapper">
-        <section class="panel col-md-10">
-            <header class="panel-heading">
+        <section class="card col-md-10 mb-3">
+            <header class="card-header">
                 {{user.first_name}} {{user.last_name}}
             </header>
 
         </section>
     <div class="row">
         <div class="col-lg-6">
-            <section class="panel">
-                <header class="panel-heading"{{user.first_name}} {{user.last_name}}</header>
-                <div class="panel-body">
-	                <section class="panel">
-	                    <div class="panel-body">
+            <section class="card">
+                <header class="card-header">{{user.first_name}} {{user.last_name}}</header>
+                <div class="card-body">
+	                <section class="card">
+	                    <div class="card-body">
 	                        <div class="row p-details">
 	                            <div class="col-md-9">
 	                            	<p><span class="bold">Role: </span>{{role}}</p>
@@ -32,7 +32,7 @@
 	                            </div>
 	                            <div class="col-md-3">
 	                            	<p><span><small>Profile Picture</small></span></p>
-	                            	<p><img style="max-width: 100%; max-height:500px;" src="{% url 'taskManager:download_profile_pic' user.id %}" /></p>
+	                            	<p><img class="img-fluid" style="max-width: 100%; max-height:500px;" src="{% url 'taskManager:download_profile_pic' user.id %}" /></p>
 	                            </div>
 	                        </div>
 	                    </div>

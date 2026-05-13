@@ -2,40 +2,50 @@
 
 {% block content %}
 <section class="wrapper">
-<div class="row">
-  <div class="col-lg-6">
-      <section class="panel">
-          <header class="panel-heading">
-              Edit Task
-                  <span class="pull-right">
-                  <a href="{% url 'taskManager:note_create' project_id=task.project.id task_id=task.id %}" class="btn btn-primary btn-xs">Add Note</a>
-                  {% if task.completed %}
-                  <a href="#" id="loading-btn" class="btn btn-success btn-xs" disabled="disabled"><i class="fa fa-check"></i>Task is Completed</a>
-                  {% endif %}
-                </span>
-          </header>
-          <div class="panel-body">
-              <form method="post" role="form">
-                  {% csrf_token %}
-                  <div class="form-group">
-                      <label>Task Title</label>
-                      <input name="task_title" class="form-control" value ="{{task.title}}"><br />
-                      <label>Task Details</label>
-                      <textarea name="text" class="form-control">{{task.text}}</textarea><br />
-                      <label>Task Due Date</label><br />
-                      <input name="task_duedate" class="form-control" id="datetimepicker" type="text" value="{{due_date}}"><br />
-                      <label>Task Completion</label>
-                      <input type="radio" name="task_completed" value="1" {% if task.completed %}checked{% endif %}> Yes&nbsp;
-                      <input type="radio" name="task_completed" value="0" {% if not task.completed %}checked{% endif %}> No
-                  </div>
-                  <button type="submit" class="btn btn-info">Finish</button>
-              </form>
-
-          </div>
-      </section>
-  </div>
-
-</div>
+    <div class="row">
+        <div class="col-lg-6">
+            <section class="card">
+                <header class="card-header d-flex justify-content-between align-items-center gap-2">
+                    <span>Edit Task</span>
+                    <span class="d-flex gap-2">
+                        <a href="{% url 'taskManager:note_create' project_id=task.project.id task_id=task.id %}" class="btn btn-primary btn-sm">Add Note</a>
+                        {% if task.completed %}
+                        <a href="#" id="loading-btn" class="btn btn-success btn-sm disabled" aria-disabled="true" disabled="disabled"><i class="fa fa-check"></i> Task is Completed</a>
+                        {% endif %}
+                    </span>
+                </header>
+                <div class="card-body">
+                    <form method="post" role="form">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">Task Title</label>
+                            <input name="task_title" class="form-control" value ="{{task.title}}">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Task Details</label>
+                            <textarea name="text" class="form-control">{{task.text}}</textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Task Due Date</label>
+                            <input name="task_duedate" class="form-control" id="datetimepicker" type="text" value="{{due_date}}">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label d-block">Task Completion</label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="task_completed" id="task_completed_yes" value="1" {% if task.completed %}checked{% endif %}>
+                                <label class="form-check-label" for="task_completed_yes">Yes</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="task_completed" id="task_completed_no" value="0" {% if not task.completed %}checked{% endif %}>
+                                <label class="form-check-label" for="task_completed_no">No</label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-info">Finish</button>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </div>
 </section>
 
 {% endblock %}
