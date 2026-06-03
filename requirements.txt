@@ -1,6 +1,6 @@
 asgiref
 Django==5.1.4
-mysqlclient
+# mysqlclient  # unused; only referenced from a commented-out DATABASES block in settings.py
 pytz
 sqlparse
 xlwt
