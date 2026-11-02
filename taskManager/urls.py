@@ -13,6 +13,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 from taskManager.serializers import UserViewSet, UserProfileViewSet, TaskViewSet, ProjectViewSet, NotesViewSet, FileViewSet
 
 from taskManager.views import index
+from mcp_server.views import mcp_endpoint
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -34,6 +35,7 @@ urlpatterns = [
     url(r'^swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     url(r'^redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     url(r'^chat/', include(('chatbot.urls','chatbot'), namespace="chatbot")),
+    url(r'^mcp/?$', mcp_endpoint, name='mcp'),
    ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

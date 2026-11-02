@@ -81,6 +81,7 @@ INSTALLED_APPS = (
     'rest_framework_simplejwt',  # Added for JWT support
     'drf_spectacular',
     'chatbot',
+    'mcp_server',
 )
 
 MIDDLEWARE = (

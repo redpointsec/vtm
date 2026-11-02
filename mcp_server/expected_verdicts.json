@@ -1,0 +1,27 @@
+{
+  "server": "vtm-mcp",
+  "endpoint": "/mcp",
+  "transport": "streamable_http",
+  "auth": "Optional bearer token (DRF token from /api-token/ or VTM JWT). Missing or invalid tokens fall through to anonymous.",
+  "notes": "Unhandled exceptions in vulnerable tools (e.g. wrong argument types) return JSON-RPC errors with full tracebacks, so error_disclosure is a valid finding on any vulnerable tool. Safe controls validate types and never return tracebacks. set_user_role and add_note mutate the DB; run ./reset_db.sh between scans.",
+  "tools": {
+    "network_diagnostics": {"vulnerable": ["cmdi"], "not_vulnerable": [], "evidence": "host='127.0.0.1; id' returns uid=... in result text"},
+    "search_tasks": {"vulnerable": ["sql_injection"], "not_vulnerable": [], "evidence": "query=\"' UNION SELECT id, username, password, email FROM auth_user--\" returns password hashes"},
+    "import_attachment_from_url": {"vulnerable": ["ssrf"], "not_vulnerable": [], "evidence": "url=http://127.0.0.1:<port>/ht/ or a cloud metadata URL returns the internal response body"},
+    "read_attachment": {"vulnerable": ["path_traversal"], "not_vulnerable": [], "evidence": "filename='../../../../../../../etc/passwd' returns the file"},
+    "get_user_profile": {"vulnerable": ["idor", "error_disclosure"], "not_vulnerable": [], "evidence": "any user_id returns DOB/SSN/password hash; user_id='abc' returns a JSON-RPC error with a Python traceback"},
+    "read_note": {"vulnerable": ["idor", "mcp_indirect_prompt_injection"], "not_vulnerable": [], "evidence": "note text (writable via add_note) is returned verbatim with no retrieved-content framing"},
+    "add_note": {"vulnerable": ["mcp_excessive_agency"], "not_vulnerable": [], "evidence": "writes to any task with no membership check or confirmation"},
+    "render_note_preview": {"vulnerable": ["xss"], "not_vulnerable": [], "evidence": "<img src=x onerror=alert(1)> is returned unescaped inside the HTML"},
+    "get_project_report": {"vulnerable": ["mcp_tool_poisoning", "idor"], "not_vulnerable": [], "evidence": "<IMPORTANT> override block in description; include_audit_data=true adds every user's password hash and API token"},
+    "set_user_role": {"vulnerable": ["mcp_excessive_agency", "mflac"], "not_vulnerable": [], "evidence": "anonymous call grants is_staff/is_superuser with no confirmation"},
+    "send_team_email": {"vulnerable": ["mcp_excessive_agency"], "not_vulnerable": [], "evidence": "sends to any recipient immediately with no confirmation"},
+    "check_host_reachable": {"vulnerable": [], "not_vulnerable": ["cmdi", "sql_injection"], "evidence": "host must parse as an IP; argv list, no shell; returns only reachable/unreachable"},
+    "find_my_tasks": {"vulnerable": [], "not_vulnerable": ["sql_injection", "cmdi", "mflac"], "evidence": "ORM icontains filter scoped to the caller; anonymous calls rejected"},
+    "preview_note_text": {"vulnerable": [], "not_vulnerable": ["xss", "sql_injection", "cmdi"], "evidence": "input is html.escape()d"},
+    "get_project_status": {"vulnerable": [], "not_vulnerable": ["idor", "mflac"], "evidence": "requires auth and project membership; non-integer ids rejected as isError"}
+  },
+  "resources": {
+    "vtm://debug/environment": {"vulnerable": ["sensitive_data_exposure"], "evidence": "returns SECRET_KEY, DATABASES, OPENAI_API_KEY"}
+  }
+}
