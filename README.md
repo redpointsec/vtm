@@ -32,3 +32,14 @@ log in and click **AI Assistant** in the sidebar.
 
 Configure the OpenAI API key by setting the `OPENAI_API_KEY` environment
 variable in `taskManager/settings.py` or via your deployment environment.
+
+## MCP Server
+
+VTM exposes an intentionally vulnerable MCP server at `/mcp` (streamable HTTP,
+JSON responses). It is a true-positive target for MCP security scanners and
+includes a few deliberately safe control tools for measuring false positives.
+`mcp_server/expected_verdicts.json` lists the expected verdict for every tool.
+
+Authentication is optional: send `Authorization: Bearer <token>` with a DRF
+token from `/api-token/` or a VTM JWT. Missing or invalid tokens are treated as
+anonymous rather than rejected.

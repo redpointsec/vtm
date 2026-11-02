@@ -10,6 +10,7 @@ Primary application areas:
 
 - `taskManager/`: Django project configuration plus the main task management app.
 - `chatbot/`: AI assistant integration for querying task/project data.
+- `mcp_server/`: intentionally vulnerable MCP server (streamable HTTP at `/mcp`) used as a true-positive target for MCP scanners. `expected_verdicts.json` is the answer key.
 - `taskManager/templates/taskManager/`: HTML templates for the task manager UI.
 - `taskManager/static/taskManager/`: bundled frontend assets.
 - `taskManager/fixtures/`: seed users, groups, projects, tasks, notes, and permissions.
@@ -78,14 +79,19 @@ This chart summarizes observed vulnerable behavior in the current codebase. It i
 | Unsafe image redirect | `taskManager/views.py` `/taskManager/downloadprofilepic/` | Redirects to a stored profile image path without validation | Demonstrates untrusted URL/path use. |
 | AI data access | `chatbot/tools.py`, `chatbot/views.py` | Chatbot tools include `get_users` and broad `search_database`, exposing users, profiles, notes, files, chat records, DOB, SSN, reset tokens, and other model text fields | Demonstrates tool authorization and data-minimization review. |
 | AI write access | `chatbot/tools.py`, `chatbot/views.py` | Chatbot tools can add and update projects, tasks, and notes for accessible records | Demonstrates risks around autonomous tool use and state-changing assistant actions. |
+| MCP server transport/auth | `mcp_server/views.py` `/mcp` | Bearer auth fails open to anonymous; unhandled exceptions return full tracebacks in JSON-RPC errors | Demonstrates missing function-level access control and error disclosure on MCP. |
+| MCP tool injection sinks | `mcp_server/tools.py` | `network_diagnostics` (cmdi), `search_tasks` (sqli), `import_attachment_from_url` (ssrf), `read_attachment` (path traversal), `render_note_preview` (xss) | Scanner true positives; each returns raw evidence in a successful `result.content` text block. |
+| MCP authz / agency | `mcp_server/tools.py` | `get_user_profile`/`read_note` IDOR, `add_note`/`set_user_role`/`send_team_email` act with no confirmation or role check | Demonstrates IDOR and excessive agency over MCP. |
+| MCP poisoning / prompt injection | `mcp_server/tools.py` | `get_project_report` description carries hidden override instructions and a hidden-data flag; `read_note` returns stored note text verbatim | Demonstrates tool poisoning and indirect prompt injection. |
+| MCP resource exposure | `mcp_server/tools.py` `vtm://debug/environment` | Resource returns `SECRET_KEY`, database settings, and `OPENAI_API_KEY` | Demonstrates sensitive data exposure via MCP resources. |
 
 ## Preservation Tests
 
-Focused regression tests live in `taskManager/test_preservation.py` and `chatbot/tests.py`. Run them when changing auth, search, upload, profile, chatbot, template, or tool behavior:
+Focused regression tests live in `taskManager/test_preservation.py`, `chatbot/tests.py`, and `mcp_server/tests.py`. Run them when changing auth, search, upload, profile, chatbot, MCP, template, or tool behavior. The MCP tools `check_host_reachable`, `find_my_tasks`, `preview_note_text`, and `get_project_status` are deliberately safe controls; keep them safe:
 
 ```sh
 source venv/bin/activate
-./manage.py test chatbot taskManager.test_preservation
+./manage.py test chatbot mcp_server taskManager.test_preservation
 ```
 
 ## Useful Commands
