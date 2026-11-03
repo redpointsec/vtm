@@ -1,0 +1,13 @@
+.git
+.gitignore
+.github
+*.sqlite3
+*.log
+mysite.log
+.DS_Store
+*venv/
+__pycache__
+*.pyc
+taskManager/static/taskManager/uploads/
+chatbot/.env
+.context/
